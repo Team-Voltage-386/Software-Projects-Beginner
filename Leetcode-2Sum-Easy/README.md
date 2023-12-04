@@ -8,19 +8,19 @@ Let's solve our first programming challenge!
 
 Use your standard register and verify email steps to get an account on leetcode:
 
-![image-20231204150630865](/Users/andrewl/repos/voltage/Software-Projects-Beginner/Leetcode-2Sum-Easy/assets/image-20231204150630865.png)
+![image-20231204150630865](./assets/image-20231204150630865.png)
 
 ## Step2: Find the first problem
 
 Leetcode has hundreds of problems. The very first problem is called "Two Sum". You can find it in the problems list or navigate to it directly:
 
-![image-20231204150817314](/Users/andrewl/repos/voltage/Software-Projects-Beginner/Leetcode-2Sum-Easy/assets/image-20231204150817314.png)
+![image-20231204150817314](./assets/image-20231204150817314.png)
 
 ## Step3: Understand how leetcode works
 
 Leetcode is a website which presents you with a programming problem, and accepts your code as a solution. When you submit your code, leetcode will test your code with many problem instances and check that it works for them all:
 
-![image-20231204151345301](/Users/andrewl/repos/voltage/Software-Projects-Beginner/Leetcode-2Sum-Easy/assets/image-20231204151345301.png)
+![image-20231204151345301](./assets/image-20231204151345301.png)
 
 All solutions are contained in a class called `Solution` but with a method named after the particular problem instance. So for two-sum, the method is called `twoSum()`.
 
@@ -52,11 +52,11 @@ Method signatures basically determine what goes into the method and what's expec
 
 You'll notice the method accepts two parameters, an array of `int` called `nums` and a single `int` called `target`. You're expected to return an array of `int`.
 
-![image-20231204151821362](/Users/andrewl/repos/voltage/Software-Projects-Beginner/Leetcode-2Sum-Easy/assets/image-20231204151821362.png)
+![image-20231204151821362](./assets/image-20231204151821362.png)
 
 Now we can draw a more detailed diagram of the interaction of leetcode and your code:
 
-![image-20231204152413684](/Users/andrewl/repos/voltage/Software-Projects-Beginner/Leetcode-2Sum-Easy/assets/image-20231204152413684.png)
+![image-20231204152413684](./assets/image-20231204152413684.png)
 
 ## Step6: Try to solve this thing!
 
@@ -66,7 +66,7 @@ You can do this first with your fingers. Write out `2, 7, 11, 15` and see if you
 
 In programming we dont' have fingers, so we use variables `i` and `j` to be our fingers. They hold the _indices_ of the input array. In this diagram, the left finger is at the 7, right finger at 11, and we add to get 18, which is not the target of 9:
 
-![image-20231204154244236](/Users/andrewl/repos/voltage/Software-Projects-Beginner/Leetcode-2Sum-Easy/assets/image-20231204154244236.png)
+![image-20231204154244236](./assets/image-20231204154244236.png)
 
 Paste in the following code and see if you can modify it to work. You'll be replacing the `/* replace */` with your own code.
 
@@ -99,4 +99,4 @@ class Solution
 
 If you couldn't get it, don't worry! Modify the code until it looks like the screenshot below. Analyze and see why it works. If you're having trouble, grab a mentor!
 
-![image-20231204154610752](/Users/andrewl/repos/voltage/Software-Projects-Beginner/Leetcode-2Sum-Easy/assets/image-20231204154610752.png)
+![image-20231204154610752](./assets/image-20231204154610752.png)

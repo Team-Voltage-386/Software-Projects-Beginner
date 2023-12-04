@@ -10,14 +10,14 @@ This is a paid site, but this course in particular is free. You'll be nagged to 
 
 This will be your standard "create an account" with email verification signup process:
 
-![image-20231204144655044](/Users/andrewl/repos/voltage/Software-Projects-Beginner/Codecademy-Course-Learn-Java/assets/image-20231204144655044.png)
+![image-20231204144655044](./assets/image-20231204144655044.png)
 
 ### Step2: Register for the course
 
-![image-20231204145007602](/Users/andrewl/repos/voltage/Software-Projects-Beginner/Codecademy-Course-Learn-Java/assets/image-20231204145007602.png)
+![image-20231204145007602](./assets/image-20231204145007602.png)
 
 ## Step3: Take the course!
 
-![image-20231204145122232](/Users/andrewl/repos/voltage/Software-Projects-Beginner/Codecademy-Course-Learn-Java/assets/image-20231204145122232.png)
+![image-20231204145122232](./assets/image-20231204145122232.png)
 
 That's it! See a mentor if you get stuck!
