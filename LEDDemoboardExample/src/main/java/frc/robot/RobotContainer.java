@@ -34,6 +34,11 @@ public class RobotContainer {
         configureBindings();
     }
 
+    public void turnOnRed()
+    {
+        m_lightSubsystem.changeAllLEDColor(255,0,0);
+    }
+
     /**
      * Use this method to define your trigger->command mappings. Triggers can be
      * created via the

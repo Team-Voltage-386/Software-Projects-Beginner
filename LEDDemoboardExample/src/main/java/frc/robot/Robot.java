@@ -32,7 +32,9 @@ public class Robot extends TimedRobot {
         // Instantiate our RobotContainer. This will perform all our button bindings,
         // and put our
         // autonomous chooser on the dashboard.
+        System.out.println("Robot.robotInit()");
         m_robotContainer = new RobotContainer();
+        m_robotContainer.turnOnRed();
     }
 
     /**
@@ -47,6 +49,7 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void robotPeriodic() {
+        System.out.println("Robot.robotPeriodic()");
         // Runs the Scheduler. This is responsible for polling buttons, adding
         // newly-scheduled
         // commands, running already-scheduled commands, removing finished or
@@ -60,10 +63,12 @@ public class Robot extends TimedRobot {
     /** This function is called once each time the robot enters Disabled mode. */
     @Override
     public void disabledInit() {
+        System.out.println("Robot.disabledInit()");
     }
 
     @Override
     public void disabledPeriodic() {
+        System.out.println("Robot.disabledPeriodic()");
         if (m_robotContainer.areLightsOn()) {
             m_robotContainer.turnLightsOffCommand().schedule();
         }
@@ -75,6 +80,7 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void autonomousInit() {
+        System.out.println("Robot.autonomousInit()");
         m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
         // schedule the autonomous command (example)
@@ -86,10 +92,12 @@ public class Robot extends TimedRobot {
     /** This function is called periodically during autonomous. */
     @Override
     public void autonomousPeriodic() {
+        System.out.println("Robot.autonomousPeriodic()");
     }
 
     @Override
     public void teleopInit() {
+        System.out.println("Robot.teleopInit()");
         // This makes sure that the autonomous stops running when
         // teleop starts running. If you want the autonomous to
         // continue until interrupted by another command, remove
@@ -102,10 +110,12 @@ public class Robot extends TimedRobot {
     /** This function is called periodically during operator control. */
     @Override
     public void teleopPeriodic() {
+        System.out.println("Robot.teleopPeriodic()");
     }
 
     @Override
     public void testInit() {
+        System.out.println("Robot.testInit()");
         // Cancels all running commands at the start of test mode.
         CommandScheduler.getInstance().cancelAll();
     }
@@ -113,15 +123,18 @@ public class Robot extends TimedRobot {
     /** This function is called periodically during test mode. */
     @Override
     public void testPeriodic() {
+        System.out.println("Robot.testPeriodic()");
     }
 
     /** This function is called once when the robot is first started up. */
     @Override
     public void simulationInit() {
+        System.out.println("Robot.simulationInit()");
     }
 
     /** This function is called periodically whilst in simulation. */
     @Override
     public void simulationPeriodic() {
+        System.out.println("Robot.simulationPeriodic()");
     }
 }
