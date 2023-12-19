@@ -49,7 +49,7 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void robotPeriodic() {
-        System.out.println("Robot.robotPeriodic()");
+        //System.out.println("Robot.robotPeriodic()");
         // Runs the Scheduler. This is responsible for polling buttons, adding
         // newly-scheduled
         // commands, running already-scheduled commands, removing finished or
@@ -58,6 +58,7 @@ public class Robot extends TimedRobot {
         // robot's periodic
         // block in order for anything in the Command-based framework to work.
         CommandScheduler.getInstance().run();
+        m_robotContainer.turnOnRed();
     }
 
     /** This function is called once each time the robot enters Disabled mode. */
@@ -68,7 +69,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void disabledPeriodic() {
-        System.out.println("Robot.disabledPeriodic()");
+        //System.out.println("Robot.disabledPeriodic()");
         if (m_robotContainer.areLightsOn()) {
             m_robotContainer.turnLightsOffCommand().schedule();
         }
@@ -110,7 +111,7 @@ public class Robot extends TimedRobot {
     /** This function is called periodically during operator control. */
     @Override
     public void teleopPeriodic() {
-        System.out.println("Robot.teleopPeriodic()");
+        //System.out.println("Robot.teleopPeriodic()");
     }
 
     @Override
@@ -123,7 +124,7 @@ public class Robot extends TimedRobot {
     /** This function is called periodically during test mode. */
     @Override
     public void testPeriodic() {
-        System.out.println("Robot.testPeriodic()");
+        //System.out.println("Robot.testPeriodic()");
     }
 
     /** This function is called once when the robot is first started up. */
@@ -135,6 +136,6 @@ public class Robot extends TimedRobot {
     /** This function is called periodically whilst in simulation. */
     @Override
     public void simulationPeriodic() {
-        System.out.println("Robot.simulationPeriodic()");
+        //System.out.println("Robot.simulationPeriodic()");
     }
 }

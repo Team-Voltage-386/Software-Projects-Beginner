@@ -67,10 +67,30 @@ public class LightSubsystem extends SubsystemBase {
 
     public CommandBase changeAllLEDColor(int r, int g, int b) {
         ParallelCommandGroup parallelCommandGroup = new ParallelCommandGroup();
-        for (int i = 0; i < kLedLength; i++) {
-            parallelCommandGroup.addCommands(new ChangeLEDColorCommand(this, i, r, g, b).ignoringDisable(true));
+        for (int i = 0; i < ledBuffer.getLength(); i++)
+        {
+            //ledBuffer.setRGB(i, 255 ,0, 0);
+           parallelCommandGroup.addCommands(new ChangeLEDColorCommand(this, i, r, g, b).ignoringDisable(true));
         }
         return parallelCommandGroup;
+    }
+
+    public CommandBase setAllBlue(){
+        return runOnce(
+        () -> {
+            for (int i = 0; i < ledBuffer.getLength(); i++)
+            {
+                ledBuffer.setRGB(i,0,0,255);
+            }
+        }
+        );
+    }
+
+    public void allPurple() {
+        for (int i=0; i < ledBuffer.getLength(); i++)
+        {
+            ledBuffer.setRGB(i,100,0,200);
+        }
     }
 
     /**
@@ -88,6 +108,7 @@ public class LightSubsystem extends SubsystemBase {
     public void periodic() {
         // This method will be called once per scheduler run
         // Set the LEDs
+       // allOff();
         led.setData(ledBuffer);
     }
 

@@ -36,7 +36,11 @@ public class RobotContainer {
 
     public void turnOnRed()
     {
-        m_lightSubsystem.changeAllLEDColor(255,0,0);
+        System.out.println("turning on RED!!");
+        //m_lightSubsystem.changeAllLEDColor(255,0,0);
+        System.out.println("Purple");
+      //  m_lightSubsystem.allPurple();
+        m_lightSubsystem.setToColor(6, 0, 0, 255);
     }
 
     /**
