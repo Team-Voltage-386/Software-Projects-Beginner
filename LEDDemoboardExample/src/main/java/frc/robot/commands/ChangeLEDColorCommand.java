@@ -5,10 +5,10 @@
 package frc.robot.commands;
 
 import frc.robot.subsystems.LightSubsystem;
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 
 /** An example command that uses an example subsystem. */
-public class ChangeLEDColorCommand extends CommandBase {
+public class ChangeLEDColorCommand extends Command {
     static enum PresetColorEnum {
         RED,
         BLUE,

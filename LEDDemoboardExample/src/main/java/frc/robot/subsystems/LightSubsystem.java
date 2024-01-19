@@ -7,7 +7,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.util.Color;
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.commands.ChangeLEDColorCommand;
@@ -59,13 +59,13 @@ public class LightSubsystem extends SubsystemBase {
         return lightsAreOn;
     }
 
-    public CommandBase changeLEDColor(int index, int r, int g, int b) {
+    public Command changeLEDColor(int index, int r, int g, int b) {
         // Inline construction of command goes here.
         // Subsystem::RunOnce implicitly requires `this` subsystem.
         return runOnce(() -> new ChangeLEDColorCommand(this, index, r, g, b).ignoringDisable(true));
     }
 
-    public CommandBase changeAllLEDColor(int r, int g, int b) {
+    public Command changeAllLEDColor(int r, int g, int b) {
         ParallelCommandGroup parallelCommandGroup = new ParallelCommandGroup();
         for (int i = 0; i < ledBuffer.getLength(); i++)
         {
@@ -75,7 +75,7 @@ public class LightSubsystem extends SubsystemBase {
         return parallelCommandGroup;
     }
 
-    public CommandBase setAllBlue(){
+    public Command setAllBlue(){
         return runOnce(
         () -> {
             for (int i = 0; i < ledBuffer.getLength(); i++)
