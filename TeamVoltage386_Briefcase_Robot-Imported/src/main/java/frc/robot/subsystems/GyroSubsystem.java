@@ -16,8 +16,8 @@ public class GyroSubsystem extends SubsystemBase {
     }
     @Override
     public void periodic() {
-        System.out.println("Gyro Angle: " + gyro.getAngle());
-        System.out.println("Gyro Rate: " + gyro.getRate());
+        //System.out.println("Gyro Angle: " + gyro.getAngle());
+        //System.out.println("Gyro Rate: " + gyro.getRate());
     }
     
 }
