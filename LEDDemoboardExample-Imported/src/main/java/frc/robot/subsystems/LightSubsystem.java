@@ -33,7 +33,7 @@ public class LightSubsystem extends SubsystemBase {
     // Length is expensive to set, so only set it once, then just update data
     AddressableLEDBuffer ledBuffer = new AddressableLEDBuffer(kLedLength);
 
-    /** Creates a new ExampleSubsystem. */
+    /* Creates a new ExampleSubsystem. */
     public LightSubsystem() {
         // Set the data
         led.setLength(kLedLength);
@@ -47,8 +47,8 @@ public class LightSubsystem extends SubsystemBase {
     }
 
     public boolean areLightsOn() {
-        // Lights are on if at least one LED has either red, green, or blue that is not
-        // 0.
+        /*  Lights are on if at least one LED has either red, green, or blue that is not
+            0 */
         boolean lightsAreOn = false;
         for (int i = 0; i < kLedLength && !lightsAreOn; i++) {
             Color c = ledBuffer.getLED(i);
@@ -69,7 +69,7 @@ public class LightSubsystem extends SubsystemBase {
         ParallelCommandGroup parallelCommandGroup = new ParallelCommandGroup();
         for (int i = 0; i < ledBuffer.getLength(); i++)
         {
-            //ledBuffer.setRGB(i, 255 ,0, 0);
+            //ledBuffer.setRGB(i, 128 ,128, 0);
            parallelCommandGroup.addCommands(new ChangeLEDColorCommand(this, i, r, g, b).ignoringDisable(true));
         }
         return parallelCommandGroup;
@@ -91,6 +91,7 @@ public class LightSubsystem extends SubsystemBase {
         {
             ledBuffer.setRGB(i,100,0,200);
         }
+            
     }
 
     /**

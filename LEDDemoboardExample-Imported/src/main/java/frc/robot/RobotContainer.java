@@ -40,7 +40,7 @@ public class RobotContainer {
         //m_lightSubsystem.changeAllLEDColor(255,0,0);
         //System.out.println("Purple");
       //  m_lightSubsystem.allPurple();
-        m_lightSubsystem.setToColor(6, 0, 0, 255);
+        m_lightSubsystem.setToColor(6, 128, 0, 128);
     }
 
     /**
@@ -60,7 +60,7 @@ public class RobotContainer {
     private void configureBindings() {
         // Schedule `changeAllLEDColor` when the Xbox controller's B button is pressed,
         // cancelling on release.
-        m_driverController.b().whileTrue(m_lightSubsystem.changeAllLEDColor(255,0,0));
+        m_driverController.b().whileTrue(m_lightSubsystem.changeAllLEDColor(128,0,128));
         // Schedule `changeAllLEDColor` to clear when the Xbox controller's A button is pressed,
         // cancelling on release.
         m_driverController.a().whileTrue(m_lightSubsystem.changeAllLEDColor(0, 0, 0));
