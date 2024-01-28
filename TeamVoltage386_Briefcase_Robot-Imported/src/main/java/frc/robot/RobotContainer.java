@@ -3,7 +3,7 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
-
+import frc.robot.subsystems.*;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
@@ -65,4 +65,10 @@ public class RobotContainer {
     // An example command will be run in autonomous
     return Autos.exampleAuto(m_exampleSubsystem);
   }
+
+  // Set the LEDs to Green when A is pushed
+  public void changeLEDsOnAButton(boolean whenButtonPressed) {
+    allPurple();
+  }
+  
 }
