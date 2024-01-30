@@ -75,7 +75,19 @@ public class RobotContainer {
             m_lightSubsystem.changeAllLEDColor(0, 0, 255);
             
         }
-
+        public void discoMode(int color /* 1 is red, 2 is green, 3 is blue, 0 is white */, int index, Timer time, int pauseInterval, boolean version){
+            if (!version){
+                switch (color){
+                    case 0: {
+                        m_lightSubsystem.changeLEDColor(index, 255,255,255).schedule();
+                    }
+                    case 1: {
+                        m_lightSubsystem.changeLEDColor(index, 255, 0, 0).schedule();
+                    }
+                    case 2: m_driverController.changeLEDColor(index, 0,255,0).schedule();
+                }
+            }
+        }
 
 
 
@@ -115,20 +127,7 @@ public class RobotContainer {
                     break;
                 }
                 case BLUE: { //Changes the LEDs to Blue for half a second.
-                    if (runs == 0){ 
-                    System.out.println("BLUE LEDs");
-                    m_lightSubsystem.changeAllLEDColor(0, 0, 255).schedule();
-                    SmartDashboard.putString("Light State", "Blue");
-                    time.reset(); //Starts the timer.
-                    time.start();
-                    runs++;
-                } else { //The IF statement has to stay in the Else statement, so that it can keep checking the time since last color switch.
-                    if (time.get() > 0.5) {
-                        state = LightState.GREEN;
-                        time.stop(); //Stops the timer to be reset later. Helps clean up memory.
-                        runs--;
-                    }
-                }
+                    
                 }
                 case GREEN: {
                     if(runs == 0){
