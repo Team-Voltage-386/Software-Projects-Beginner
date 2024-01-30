@@ -106,25 +106,19 @@ public class RobotContainer {
 
         m_driverController.y().whileTrue(Commands.run(() -> {
             SmartDashboard.putNumber("Time", time.get()); //Puts the time between the shifts on the shuffleboard, resets every collor switch
-            if (modeSwitch){
+            if (!modeSwitch){
             switch(state){
                 case INIT: { //Arms the disco mode.
                     state = LightState.BLUE;
-                    System.out.println("Disco Mode Ready"); //Prints disco mode.
-                    SmartDashboard.putBoolean("BLUE", false); // Displays which collor is active on Shuffleboard
-                    SmartDashboard.putBoolean("RED", false);
-                    SmartDashboard.putBoolean("GREEN", false);
-                    SmartDashboard.putBoolean("Rainbow", !modeSwitch);
                     time.start(); //Starts the timer that shifts between colors.
+                    SmartDashboard.putString("Light State", "InitIalized");
                     break;
                 }
                 case BLUE: { //Changes the LEDs to Blue for half a second.
                     if (runs == 0){ 
                     System.out.println("BLUE LEDs");
                     m_lightSubsystem.changeAllLEDColor(0, 0, 255).schedule();
-                    SmartDashboard.putBoolean("BLUE", true);
-                    SmartDashboard.putBoolean("RED", false);
-                    SmartDashboard.putBoolean("GREEN", false);
+                    SmartDashboard.putString("Light State", "Blue");
                     time.reset(); //Starts the timer.
                     time.start();
                     runs++;
@@ -138,11 +132,8 @@ public class RobotContainer {
                 }
                 case GREEN: {
                     if(runs == 0){
-                    System.out.println("GREEN LEDs");
                     m_lightSubsystem.changeAllLEDColor(0, 255, 0).schedule();
-                    SmartDashboard.putBoolean("BLUE", false);
-                    SmartDashboard.putBoolean("RED", false);
-                    SmartDashboard.putBoolean("GREEN", true);
+                    SmartDashboard.putString("Light State", "Green");
                     time.reset();
                     time.start();
                     runs++;
@@ -156,11 +147,8 @@ public class RobotContainer {
                 }
                 case RED: {
                     if (runs == 0){
-                    System.out.println("RED LEDs");
                     m_lightSubsystem.changeAllLEDColor(255,0,0).schedule();
-                    SmartDashboard.putBoolean("BLUE", false);
-                    SmartDashboard.putBoolean("RED", true);
-                    SmartDashboard.putBoolean("GREEN", false);
+                    SmartDashboard.putString("Light State", "Red");
                     time.reset();
                     time.start();
                     runs++;
@@ -176,71 +164,74 @@ public class RobotContainer {
         } else {
             switch (state) {
                 case INIT: {
-                    System.out.println("Rainbow Mode");
-                    m_lightSubsystem.changeAllLEDColor(255, 255, 255);
-                    SmartDashboard.putBoolean("BLUE", false); // Displays which collor is active on Shuffleboard
-                    SmartDashboard.putBoolean("RED", false);
-                    SmartDashboard.putBoolean("GREEN", false);
-                    SmartDashboard.putBoolean("Rainbow", !modeSwitch);
-                    state = LightState.RED;
-                    time.reset();
+                    state = LightState.BLUE;
                     time.start();
+                    SmartDashboard.putString("Light State", "Initialized V2");
+                    runs = 0;
                     break;
                 }
-                case RED: {
-                   if (runs < 10 && time.get() > 0.1){
-                        m_lightSubsystem.changeLEDColor(runs, 255, 0, 0);
-                        runs++;
-                        time.restart();
-                   } else {
-                    if (time.get() > 0.1){
-                        time.stop();
-                        state = LightState.GREEN;
-                        runs = 0;
+                case BLUE: {
+                    if (runs < 10) {
+                        m_lightSubsystem.changeLEDColor(runs, 0, 0, 255).schedule();
+                        SmartDashboard.putString("Light State", "Changed LED " + runs + " to Blue");
+                        if (time.get() > 0.1) {
+                            time.reset();
+                            runs++;
+                        }
+                    } else {
+                        if (time.get() > 0.1) {
+                            runs = 0;
+                            state = LightState.GREEN;
+                            time.reset();
+                        }
                     }
-                   }
                 }
                 case GREEN: {
-                    if (runs < 10 && time.get() > 0.1){
-                        m_lightSubsystem.changeLEDColor(runs, 0, 255, 0);
-                        runs++;
-                        time.restart();
-                   } else {
-                    if (time.get() > 0.1){
-                        time.stop();
-                        state = LightState.BLUE;
-                        runs = 0;
+                    if (runs < 10){
+                        m_lightSubsystem.changeLEDColor(runs, 0, 255, 0).schedule();
+                        SmartDashboard.putString("Light State", "Changed LED " + runs + " to Green");
+                        if (time.get() > 0.1) {
+                            time.reset();
+                            runs++;
+                        }
+                    } else {
+                        if (time.get() > 0.1){
+                            runs = 0;
+                            time.reset();
+                            state = LightState.RED;
+                        }
                     }
                 }
+                case RED:  {
+                    if (runs < 10){
+                        m_lightSubsystem.changeLEDColor(runs, 255,0,0).schedule();
+                        SmartDashboard.putString("Light State", "Changed LED " + runs + " to Red");
+                        if (time.get() > 0.1){
+                            time.reset();
+                            runs++;
+                        }
+                    } else {
+                        if (time.get() > 0.1){
+                            runs = 0;
+                            time.reset();
+                            state = LightState.BLUE;
+                        }
+                    }
                 }
-                case BLUE: {
-                    if (runs < 10 && time.get() > 0.1){
-                        m_lightSubsystem.changeLEDColor(runs, 0, 0, 255);
-                        runs++;
-                        time.restart();
-                   } else {
-                    if (time.get() > 0.1){
-                        time.stop();
-                        state = LightState.RED;
-                        runs = 0;
-                    }
-                    }
                 }
             }
-        }
-    }));
+        }));
     m_driverController.y().whileFalse(Commands.runOnce( () -> {
-        System.out.println("LEDs Off");
-        SmartDashboard.putBoolean("BLUE", false);
-        SmartDashboard.putBoolean("RED", false);
-        SmartDashboard.putBoolean("GREEN", false);
+       SmartDashboard.putString("Light State", "Off.");
         m_lightSubsystem.changeAllLEDColor(0, 0, 0).schedule();
     }));
     m_driverController.leftBumper().whileTrue(Commands.runOnce( () -> {
         modeSwitch = !modeSwitch;
         state = LightState.INIT;
         runs = 0;
-        SmartDashboard.putBoolean("LED Mode", modeSwitch);
+        SmartDashboard.putBoolean("LED Mode v2", modeSwitch);
+        SmartDashboard.putString("Light State", "Waiting with White...");
+        m_lightSubsystem.changeAllLEDColor(255, 255, 255).schedule();
     }));
     }
 
