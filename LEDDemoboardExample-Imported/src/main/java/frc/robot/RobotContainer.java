@@ -80,6 +80,8 @@ public class RobotContainer {
         // Schedule `changeAllLEDColor` to clear when the Xbox controller's X button is pressed, turn LEDs pink.
         // cancelling on release.
         m_driverController.x().whileTrue(m_lightSubsystem.changeAllLEDColor(128, 0, 128));
+
+        m_driverController.y().whileTrue(m_lightSubsystem.changeLEDColor(runs, runs, runs, runs))
     }
 
 

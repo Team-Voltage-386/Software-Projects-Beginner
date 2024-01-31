@@ -1,36 +1,59 @@
 package frc.robot.DiscoModeHandler;
 
+import edu.wpi.first.wpilibj2.command.Command;
 
-public class DiscoModeHandler {
-    public static enum LightState { // Stores the state of the light
-        INIT,
-        RED,
-        GREEN,
-        BLUE
+public class DiscoModeOrganizer extends Command { //Decides what to do
+
+    
+    DiscoModeState modeState;
+    DiscoLightState lightState;
+
+    public DiscoModeOrganizer(){
+        this.modeState = new DiscoModeState(ModeState.INIT);
+        this.lightState = new DiscoLightState(LightState.INIT);
     }
 
-    public static enum ModeState {
-        INIT,
-        COLLECTIVE,
-        SEQUENTIAL
-    }
-    ModeState state = ModeState.INIT;
-    public void changeDiscoModeState(int switchState /* whether to use Sequential (1) or Collective (2), provide 0 for Initial */){
+    public void setStates(int switchState /* whether to use Sequential (1) or Collective (2), provide 0 for Initial */, 
+    int switchLights/* Which color to switch to, 0 is White (Init), 1 is Red, 2 is Blue, 3 is Green */){
         switch (switchState){
             case 0: {
-                state = ModeState.INIT;
+                modeState.set(ModeState.INIT);
                 break;
             }
             case 1: {
-                state = ModeState.SEQUENTIAL;
+                modeState.set(ModeState.SEQUENTIAL);
                 break;
             }
             case 2: {
-                state = ModeState.COLLECTIVE;
+                modeState.set(ModeState.COLLECTIVE);
+                break;
             }
             default: {
-                state = ModeState.INIT;
+                modeState.set(ModeState.INIT);
+                break;
             }
         }
+        switch (switchLights){
+            case 0: {
+                lightState = LightState.INIT;
+                break;
+            }
+            case 1: {
+                lightState = LightState.RED;
+                break;
+            }
+            case 2:{
+                lightState = LightState.BLUE;
+                break;
+            }
+            case 3: {
+                lightState = LightState.GREEN;
+                break;
+            }
+        }
+        return;
     }
+
+
+
 }
