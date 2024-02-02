@@ -17,7 +17,10 @@ public class DiscoSequential {
         this.lightState = lightState;
     }
     
-    public void changeLEDCOllorSequentially(int ledLength, int r, int g, int b, double pauseForSeconds, LightSubsystem subsystem){ //Change the LEDs individually
+    public void changeLEDCOllorSequentially(int ledLength /* The length of all the LEDs, starts with 0. */,
+     int r, int g, int b, double pauseForSeconds /* how long to Wait */, 
+     LightSubsystem subsystem /* in order to work, this needs to be m_lightSubsystem */)  
+     { //Change the LEDs individually
         for (int i = 0; i <= ledLength;){
             subsystem.changeLEDColor(i, r, g, b).schedule();
             if (timer.get() > pauseForSeconds){
@@ -27,10 +30,25 @@ public class DiscoSequential {
         }
     }
 
-    public void sequentiallyChangeLEDs(DiscoModeState modeState){ // Figure out when the LEDs need to change.
+    public void sequentiallyChangeLEDs(DiscoModeState modeState, DiscoLightState lightState){ // Figure out when the LEDs need to change.
         if (modeState.get() == ModeState.SEQUENTIAL){
+            switch (lightState.get()){
+                case INIT:{
             
-        }
+                }
+                case RED:{
+
+                }
+                case GREEN:{
+
+                }
+                case BLUE:{
+                    
+                }
+
+            }
+        }  
     }
+    
 }
 
