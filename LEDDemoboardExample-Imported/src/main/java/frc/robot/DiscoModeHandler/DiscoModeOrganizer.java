@@ -35,19 +35,19 @@ public class DiscoModeOrganizer extends Command { //Decides what to do
         }
         switch (switchLights){
             case 0: {
-                lightState = LightState.INIT;
+                lightState.set(LightState.INIT);
                 break;
             }
             case 1: {
-                lightState = LightState.RED;
+                lightState.set(LightState.RED);
                 break;
             }
             case 2:{
-                lightState = LightState.BLUE;
+                lightState.set(LightState.GREEN);
                 break;
             }
             case 3: {
-                lightState = LightState.GREEN;
+                lightState.set(LightState.BLUE);
                 break;
             }
         }

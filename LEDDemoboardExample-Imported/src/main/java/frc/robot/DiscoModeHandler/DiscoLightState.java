@@ -1,6 +1,5 @@
 package frc.robot.DiscoModeHandler;
 
-
 public class DiscoLightState { //saves the Light State
     private LightState lightState;
     public DiscoLightState(LightState lightState){
