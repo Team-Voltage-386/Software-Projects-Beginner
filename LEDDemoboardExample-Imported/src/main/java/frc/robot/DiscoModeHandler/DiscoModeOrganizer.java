@@ -43,29 +43,37 @@ public class DiscoModeOrganizer { //Decides what to do
                 }
                 default: {
                     modeState.set(ModeState.COLLECTIVE);
+                    System.out.println("Mode switched via Deafault path");
                     break;
                 }
             }
         }
-        return;
     }
 
     public Command runDiscoMode(){ //Run Disco Modes
         System.out.println("Run disco mode");
         switch (modeState.get()){
             case COLLECTIVE:{
-                return discoCollective.discoCollective(modeState, lightState, m_lightSubsystem);
+                return discoCollective.discoCollective(modeState, lightState, m_lightSubsystem).andThen(Commands.runOnce(() -> {
+                    System.out.println("Disco Collective successfully ran.");
+                }));
             }
             case SEQUENTIAL:{
-                 return discoSequential.discoSequentialMode(m_lightSubsystem);
+                 return discoSequential.discoSequentialMode(m_lightSubsystem).andThen(Commands.runOnce(() -> {
+                    System.out.println("Disco Sequential successfully ran.");
+                }));
             }
             case RAINBOW:{
                 return Commands.runOnce(() -> {
                     System.out.println("Rainbow mode is still a work in progress, and is currently unavailable.");
                 });
             }
+            default:{
+                return Commands.runOnce(() -> {
+                    System.out.println("Error: Deafault Path");
+                });
+            }
         }
-        return null;
     }
 
 }
