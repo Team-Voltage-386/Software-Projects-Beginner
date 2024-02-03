@@ -7,6 +7,7 @@ This is the read me for the Disco Mode.
             LightState;
                 LightState lightState
                     The enum variable that determines which color to switch to.
+                        Consists of INIT, RED, GREEN, and BLUE
 
                 lightstate.get()
                     Retrieves which state the enum is in.
@@ -17,6 +18,7 @@ This is the read me for the Disco Mode.
             ModeState
                 ModeState modeState
                     The enum variable that determines which mode runs.
+                        Consists of COLLECTIVE, SEQUENTIAL, and RAINBOW
             
                 modeState.get()
                     Retrieves the mode currently enabled.
@@ -24,4 +26,12 @@ This is the read me for the Disco Mode.
                 modeState.set()
                     Sets the enum variable. You shouldn't have to use this at all, really.
 
-        
+
+Contact Jake for more info.
+
+TODO: 
+    *Write INIT for all modes
+    *Write COLLECTIVE modeState
+    *Write SEQUENTIAL modeState
+    *Write RAINBOW modeState
+    *Finish Organizer
