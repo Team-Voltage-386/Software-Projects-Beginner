@@ -1,5 +1,7 @@
 package frc.robot.DiscoModeHandler;
 
+import javax.swing.text.LayeredHighlighter;
+
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.subsystems.LightSubsystem;
 
@@ -30,11 +32,11 @@ public class DiscoSequential {
         }
     }
 
-    public void sequentiallyChangeLEDs(DiscoModeState modeState, DiscoLightState lightState){ // Figure out when the LEDs need to change.
+    public void sequentiallyChangeLEDs(DiscoModeState modeState, DiscoLightState lightState, LightSubsystem m_lightSubsystem){ // Figure out when the LEDs need to change.
         if (modeState.get() == ModeState.SEQUENTIAL){
             switch (lightState.get()){
                 case INIT:{
-            
+                    m_lightSubsystem.changeAllLEDColor(255,255,255).schedule();
                 }
                 case RED:{
 
