@@ -8,15 +8,18 @@ import frc.robot.subsystems.LightSubsystem;
 public class DiscoModeOrganizer { //Decides what to do
 
     DiscoModeState modeState;
+    DiscoLightState lightState;
     DiscoCollective discoCollective;
     DiscoSequential discoSequential;
-    DiscoLightState lightState;
     LightSubsystem m_lightSubsystem;
 
 
-    public DiscoModeOrganizer(){
+    public DiscoModeOrganizer(LightSubsystem lightSubsystem){
         this.modeState = new DiscoModeState(ModeState.COLLECTIVE);
         this.lightState = new DiscoLightState(LightState.INIT);
+        this.discoCollective = new DiscoCollective(modeState, lightState);
+        this.discoSequential = new DiscoSequential(modeState, lightState);
+        this.m_lightSubsystem = lightSubsystem;
     }
 
     public void setMode(int switchMode /* whether to use Collective (0) Sequential (1) or Rainbow (2) */){
@@ -48,6 +51,7 @@ public class DiscoModeOrganizer { //Decides what to do
     }
 
     public Command runDiscoMode(){ //Run Disco Modes
+        System.out.println("Run disco mode");
         switch (modeState.get()){
             case COLLECTIVE:{
                 return discoCollective.discoCollective(modeState, lightState, m_lightSubsystem);

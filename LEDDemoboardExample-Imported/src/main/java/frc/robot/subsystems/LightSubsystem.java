@@ -66,6 +66,7 @@ public class LightSubsystem extends SubsystemBase {
     }
 
     public Command changeAllLEDColor(int r, int g, int b) {
+        //System.out.printf("CHANGING: %d, %d, %d\n", r, g, b);
         ParallelCommandGroup parallelCommandGroup = new ParallelCommandGroup();
         for (int i = 0; i < ledBuffer.getLength(); i++)
         {

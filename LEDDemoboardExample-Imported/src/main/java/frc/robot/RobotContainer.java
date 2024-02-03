@@ -7,10 +7,7 @@ package frc.robot;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.DiscoModeHandler.DiscoModeOrganizer;
 import frc.robot.subsystems.LightSubsystem;
-import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -27,7 +24,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
     // The robot's subsystems and commands are defined here...
     private final LightSubsystem m_lightSubsystem = new LightSubsystem();
-    private final DiscoModeOrganizer m_organizer = new DiscoModeOrganizer();
+    private final DiscoModeOrganizer m_organizer = new DiscoModeOrganizer(m_lightSubsystem);
     private int i = 0;
 
     // Replace with CommandPS4Controller or CommandJoystick if needed

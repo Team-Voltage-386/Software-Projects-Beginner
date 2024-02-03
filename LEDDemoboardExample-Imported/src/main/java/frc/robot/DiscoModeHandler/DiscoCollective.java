@@ -10,8 +10,10 @@ public class DiscoCollective {
     DiscoLightState lightState;
     Timer timer;
 
-    public DiscoCollective(){ //Contstructor
-        Timer timer = new Timer();
+    public DiscoCollective(DiscoModeState modeState, DiscoLightState lightState){ //Contstructor
+        this.modeState = modeState;
+        this.lightState = lightState;
+        this.timer = new Timer();
         timer.start();
     }
 
@@ -54,10 +56,13 @@ public class DiscoCollective {
                     }
                     }));
                 }
+                default:{
+                    return Commands.run(() -> {});
+                }
             }
         } else {
             return m_LightSubsystem.changeAllLEDColor(0, 0, 0);
         }
-        return null;
+
     }
 }

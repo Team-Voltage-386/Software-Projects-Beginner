@@ -75,6 +75,9 @@ public class DiscoSequential {
                     }
                     });
                 }
+                default:{
+                    return Commands.run(() -> {});
+                }
             }
         }
         return null;
