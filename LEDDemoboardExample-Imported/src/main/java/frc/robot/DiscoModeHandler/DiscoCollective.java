@@ -1,4 +1,6 @@
 package frc.robot.DiscoModeHandler;
+
+import frc.robot.commands.WaitThenRunCommand;
 import frc.robot.subsystems.LightSubsystem;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -10,54 +12,60 @@ public class DiscoCollective {
     DiscoLightState lightState;
     Timer timer;
 
-    public DiscoCollective(DiscoModeState modeState, DiscoLightState lightState){ //Contstructor
+    public DiscoCollective(DiscoModeState modeState, DiscoLightState lightState) { // Contstructor
         this.modeState = modeState;
         this.lightState = lightState;
         this.timer = new Timer();
         timer.start();
     }
 
-    public Command discoCollective(DiscoModeState modeState,DiscoLightState lightState, LightSubsystem m_LightSubsystem){
-        //read modeState
-        if (modeState.get() == ModeState.COLLECTIVE){
-            //read lightState
-            switch (lightState.get()){
-                //do something about it
+    public Command discoCollective(DiscoModeState modeState, DiscoLightState lightState,
+            LightSubsystem m_LightSubsystem) {
+        // read modeState
+        if (modeState.get() == ModeState.COLLECTIVE) {
+            System.out.printf("Light State: %s\n", lightState.get().toString());
+            // read lightState
+            switch (lightState.get()) {
+                // do something about it
                 case INIT: {
-                    return m_LightSubsystem.changeAllLEDColor(255, 255, 255).andThen(Commands.runOnce(() -> {
-                        if (timer.get() > 0.1){
-                            timer.reset();
-                            lightState.set(LightState.RED);
-                        }
-                    }));
+                    return m_LightSubsystem.changeAllLEDColor(255, 255, 255).andThen(
+                            new WaitThenRunCommand(() -> {
+                                timer.reset();
+                                lightState.set(LightState.RED);
+                            }, () -> {
+                                return timer.get() > 0.5;
+                            }));
                 }
                 case RED: {
-                    return m_LightSubsystem.changeAllLEDColor(255, 0, 0).andThen(Commands.runOnce(() -> {
-                        if (timer.get() >0.1){
+                    return m_LightSubsystem.changeAllLEDColor(255, 0, 0).andThen(
+                            new WaitThenRunCommand(() -> {
+                                timer.reset();
+                                lightState.set(LightState.GREEN);
+                            }, () -> {
+                                return timer.get() > 0.5;
+                            }));
+                }
+                case GREEN: {
+                    return m_LightSubsystem.changeAllLEDColor(0, 255, 0).andThen(
+                        new WaitThenRunCommand(() -> {
                             timer.reset();
-                            lightState.set(LightState.GREEN);
-                        }
-                    }));
-                    
+                            lightState.set(LightState.BLUE);
+                        }, () -> {
+                            return timer.get() > 0.5;
+                        }));
                 }
-                case GREEN:{
-                    return m_LightSubsystem.changeAllLEDColor(0, 255, 0).andThen(Commands.runOnce(() -> {
-                    if (timer.get() > 0.1){
-                        timer.reset();
-                        lightState.set(LightState.BLUE);
-                    }
-                    }));
+                case BLUE: {
+                    return m_LightSubsystem.changeAllLEDColor(0, 0, 255).andThen(
+                            new WaitThenRunCommand(() -> {
+                                timer.reset();
+                                lightState.set(LightState.RED);
+                            }, () -> {
+                                return timer.get() > 0.5;
+                            }));
                 }
-                case BLUE:{
-                    return m_LightSubsystem.changeAllLEDColor(0, 0, 255).andThen(Commands.runOnce(() -> {
-                    if (timer.get() > 0.1){
-                        timer.reset();
-                        lightState.set(LightState.RED);
-                    }
-                    }));
-                }
-                default:{
-                    return Commands.run(() -> {});
+                default: {
+                    return Commands.run(() -> {
+                    });
                 }
             }
         } else {
