@@ -29,7 +29,7 @@ This is the read me for the Disco Mode.
 
 Contact Jake for more info.
 
-TODO: 
+TO DO: 
     *Write INIT for all modes
     *Write COLLECTIVE modeState
     *Write SEQUENTIAL modeState

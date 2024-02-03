@@ -39,13 +39,16 @@ public class DiscoCollective {
                     m_LightSubsystem.changeAllLEDColor(0, 255, 0).schedule();
                     if (timer.get() > 0.1){
                         timer.reset();
-
+                        lightState.set(LightState.BLUE);
                         break;
                     }
                 }
                 case BLUE:{
                     m_LightSubsystem.changeAllLEDColor(0, 0, 255).schedule();
-                    if (){
+                    if (timer.get() > 0.1){
+                        timer.reset();
+                        lightState.set(LightState.RED);
+                        break;
 
                     }
 
