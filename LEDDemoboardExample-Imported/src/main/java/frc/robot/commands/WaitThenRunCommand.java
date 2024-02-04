@@ -11,8 +11,8 @@ import java.util.function.Supplier;
 import edu.wpi.first.wpilibj2.command.Command;
 
 /** An example command that uses an example subsystem. */
+@SuppressWarnings("unused")
 public class WaitThenRunCommand extends Command {
-  @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField", "unused"})
   private final Runnable m_somethingToRun;
   private final Supplier<Boolean> m_waitCondition;
   private boolean m_haveRun;

@@ -79,8 +79,11 @@ public class DiscoSequential {
                     return Commands.run(() -> {});
                 }
             }
+        } else {
+            return Commands.run(() -> {
+                System.out.println("Sequential is off.");
+            });
         }
-        return null;
     }
 }
 

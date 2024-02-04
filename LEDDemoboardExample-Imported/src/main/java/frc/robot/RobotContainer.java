@@ -85,12 +85,8 @@ public class RobotContainer {
         m_driverController.y().whileTrue(m_organizer.runDiscoMode());
         //Cycles through the Disco modes as the left bumper is pressed.
         m_driverController.leftBumper().onTrue(Commands.runOnce(() -> {
-            i++;
-            if (i >=3) {
-                i  = 0;
-            }
-            m_organizer.setMode(i);
-            System.out.println("Mode switched to: " + i);
+            System.out.println("Toggle Disco Modes");
+            m_organizer.toggleDiscoModes();
         }));
     }
 

@@ -12,6 +12,7 @@ public class DiscoModeOrganizer { // Decides what to do
     DiscoSequential discoSequential;
     LightSubsystem m_lightSubsystem;
     private Command m_DiscoCommand;
+    private int i = 0;
 
     public DiscoModeOrganizer(LightSubsystem lightSubsystem) {
         this.modeState = new DiscoModeState(ModeState.COLLECTIVE);
@@ -22,7 +23,7 @@ public class DiscoModeOrganizer { // Decides what to do
         this.m_DiscoCommand = null;
     }
 
-    public void setMode(int switchMode /* whether to use Collective (0) Sequential (1) or Rainbow (2) */) {
+    private void setMode(int switchMode /* whether to use Collective (0) Sequential (1) or Rainbow (2) */) {
         if ((switchMode > 2) || (switchMode < 0)) {
             System.out.println("setMode() requires a number no smaller than 0 and no bigger than 2.");
         } else if ((switchMode % 1) != 0) {
@@ -50,6 +51,15 @@ public class DiscoModeOrganizer { // Decides what to do
         }
     }
 
+    public void toggleDiscoModes(){
+        i++;
+        if (i > 2){
+            i = 0;
+            System.out.println("'i' reset to 0");
+        }
+        setMode(i);
+    }
+
     public Command runDiscoMode() { // Run Disco Modes
         return Commands.runEnd(() -> {
             if (m_DiscoCommand == null) {
@@ -70,8 +80,7 @@ public class DiscoModeOrganizer { // Decides what to do
                     }
                     case RAINBOW: {
                         m_DiscoCommand = Commands.runOnce(() -> {
-                            System.out
-                                    .println("Rainbow mode is still a work in progress, and is currently unavailable.");
+                            System.out.println("Rainbow mode is still a work in progress, and is currently unavailable.");
                         });
                         break;
                     }
