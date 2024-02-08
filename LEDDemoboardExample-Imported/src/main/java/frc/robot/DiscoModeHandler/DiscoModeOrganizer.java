@@ -9,7 +9,6 @@ public class DiscoModeOrganizer { // Decides what to do
     DiscoModeState modeState;
     DiscoLightState lightState;
     DiscoCollective discoCollective;
-    DiscoSequential discoSequential;
     LightSubsystem m_lightSubsystem;
     private Command m_DiscoCommand;
     private int i = 0;
@@ -18,7 +17,6 @@ public class DiscoModeOrganizer { // Decides what to do
         this.modeState = new DiscoModeState(ModeState.COLLECTIVE);
         this.lightState = new DiscoLightState(LightState.INIT);
         this.discoCollective = new DiscoCollective(modeState, lightState);
-        this.discoSequential = new DiscoSequential(modeState, lightState);
         this.m_lightSubsystem = lightSubsystem;
         this.m_DiscoCommand = null;
     }
@@ -72,10 +70,7 @@ public class DiscoModeOrganizer { // Decides what to do
                         break;
                     }
                     case SEQUENTIAL: {
-                        m_DiscoCommand = discoSequential.discoSequentialMode(m_lightSubsystem)
-                                .andThen(Commands.runOnce(() -> {
-                                    System.out.println("Disco Sequential successfully ran.");
-                                })).finallyDo(() -> m_DiscoCommand = null);
+                        
                         break;
                     }
                     case RAINBOW: {

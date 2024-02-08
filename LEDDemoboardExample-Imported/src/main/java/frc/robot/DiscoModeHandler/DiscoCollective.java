@@ -19,15 +19,13 @@ public class DiscoCollective {
         timer.start();
     }
 
-    public Command discoCollective(DiscoModeState modeState, DiscoLightState lightState,
-            LightSubsystem m_LightSubsystem) {
+    public Command discoCollective(DiscoModeState modeState, DiscoLightState lightState, LightSubsystem m_LightSubsystem) {
         // read modeState
         if (modeState.get() == ModeState.COLLECTIVE) {
-            System.out.printf("Light State: %s\n", lightState.get().toString());
             // read lightState
             switch (lightState.get()) {
                 // do something about it
-                case INIT: {
+                case INIT: { //Change LEDs to White then continue like normal.
                     return m_LightSubsystem.changeAllLEDColor(255, 255, 255).andThen(
                             new WaitThenRunCommand(() -> {
                                 timer.reset();
@@ -36,7 +34,7 @@ public class DiscoCollective {
                                 return timer.get() > 0.5;
                             }));
                 }
-                case RED: {
+                case RED: {//Change LEDs to Red
                     return m_LightSubsystem.changeAllLEDColor(255, 0, 0).andThen(
                             new WaitThenRunCommand(() -> {
                                 timer.reset();
@@ -45,7 +43,7 @@ public class DiscoCollective {
                                 return timer.get() > 0.5;
                             }));
                 }
-                case GREEN: {
+                case GREEN: {//Change LEDs to Green
                     return m_LightSubsystem.changeAllLEDColor(0, 255, 0).andThen(
                         new WaitThenRunCommand(() -> {
                             timer.reset();
@@ -54,7 +52,7 @@ public class DiscoCollective {
                             return timer.get() > 0.5;
                         }));
                 }
-                case BLUE: {
+                case BLUE: {//Change LEDs to Blue
                     return m_LightSubsystem.changeAllLEDColor(0, 0, 255).andThen(
                             new WaitThenRunCommand(() -> {
                                 timer.reset();
@@ -63,9 +61,8 @@ public class DiscoCollective {
                                 return timer.get() > 0.5;
                             }));
                 }
-                default: {
-                    return Commands.run(() -> {
-                    });
+                default: { //Return null
+                    return Commands.run(() -> {});
                 }
             }
         } else {
