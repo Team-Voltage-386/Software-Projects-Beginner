@@ -5,9 +5,12 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.DiscoModeHandler.DiscoModeOrganizer;
+import frc.robot.subsystems.CountLEDs;
 import frc.robot.subsystems.LightSubsystem;
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -24,16 +27,11 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
     // The robot's subsystems and commands are defined here...
     private final LightSubsystem m_lightSubsystem = new LightSubsystem();
-    private final DiscoModeOrganizer m_organizer = new DiscoModeOrganizer(m_lightSubsystem);
-    private int i = 0;
 
     // Replace with CommandPS4Controller or CommandJoystick if needed
     private final CommandXboxController m_driverController = new CommandXboxController(OperatorConstants.kDriverControllerPort);
 
-
-
-    public static int runs = 0; //The number of times that the current switch statement has repeated the same case. Should always stay 1 or 0.
-    public static boolean modeSwitch = false; // Variable to switch the LED Modes
+    private final CountLEDs LEDCounter = new CountLEDs(m_lightSubsystem);
     
 
     /**
@@ -80,13 +78,9 @@ public class RobotContainer {
         // Schedule `changeAllLEDColor` to clear when the Xbox controller's X button is pressed, turn LEDs pink.
         // cancelling on release.
         m_driverController.x().whileTrue(m_lightSubsystem.changeAllLEDColor(128, 0, 128));
-        //Run Disoc Mode when the Xbox controller's Y button is pressed. This fucntion will schedule the 'changeLEDCollor' function.
-        //Cycles from White, to Red, to Green, to Blue, then back to Red, then Green, and so on.
-        m_driverController.y().whileTrue(m_organizer.runDiscoMode());
-        //Cycles through the Disco modes as the left bumper is pressed.
-        m_driverController.leftBumper().onTrue(Commands.runOnce(() -> {
-            System.out.println("Toggle Disco Modes");
-            m_organizer.toggleDiscoModes();
+
+        m_driverController.y().whileTrue(Commands.run(() -> {
+            LEDCounter.countLEDs();
         }));
     }
 

@@ -15,7 +15,7 @@ import frc.robot.commands.ChangeLEDColorCommand;
 public class LightSubsystem extends SubsystemBase {
     // This should be 1 for the briefcase bot. (EDIT: appears plugged into PWM port 0 for briefcase)
     // This should be 4 for the Demoboard.
-    private static final int kLedPort = 0;
+    private static final int kLedPort = 4;
 
     /**
      * Length of the LED strip
