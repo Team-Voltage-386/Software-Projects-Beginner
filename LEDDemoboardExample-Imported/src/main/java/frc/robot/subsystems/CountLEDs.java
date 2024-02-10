@@ -16,12 +16,8 @@ public class CountLEDs {
     }
 
     public void countLEDs(){
-        if (i < 58){
-            m_lightSubsystem.changeLEDColor(i, 255, 255, 255).schedule();
-            if (timer.get() > 0.5){
-                i++;
-                timer.restart();
-            }
+        for (int i = 0; i <= 80; i++){
+            
         }
     }
     
