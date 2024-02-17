@@ -46,6 +46,7 @@ public class Robot extends TimedRobot {
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
   public void disabledInit() {
+    // This ensures that the LED strip is off when the robot is disabled
     this.m_robotContainer.turnLightsOffCommand().schedule();
   }
 

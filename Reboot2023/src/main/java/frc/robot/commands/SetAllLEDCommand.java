@@ -6,23 +6,34 @@ import frc.robot.subsystems.LightSubsystem;
 /** An example command that uses an example subsystem. */
 public class SetAllLEDCommand extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
+  /*
+   * Add member variables here. You should include:
+   *  The Light Subystem
+   *  The r color
+   *  The g color
+   *  The b color
+   * 
+   */
   private final LightSubsystem m_subsystem;
-  private final int m_r;
-  private final int m_g;
-  private final int m_b;
 
-  public SetAllLEDCommand(LightSubsystem subsystem, int r, int g, int b) {
+  /*
+   * Add arguments to the constructor
+   */
+  public SetAllLEDCommand(LightSubsystem subsystem) {
+    /*
+     * Initialize all variables
+     */
     this.m_subsystem = subsystem;
-    this.m_r = r;
-    this.m_g = g;
-    this.m_b = b;
-    // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(subsystem);
+    
+    // Add requirement to the Light Subystem
+    addRequirements(this.m_subsystem);
   }
 
   @Override
   public void initialize() {
-    this.m_subsystem.setAllLED(m_r, m_g, m_b);
+    /*
+     * Call the setAllLEDCommand from LightSubystem
+     */
   }
 
   @Override

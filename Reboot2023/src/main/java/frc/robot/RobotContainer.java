@@ -42,14 +42,28 @@ public class RobotContainer {
    */
   private void configureBindings() {
 
+    // Have the 'a' button set a single LED to Red
     m_driverController.a().onTrue(m_lightSubystem.setSingleLEDCommand(255, 0, 0)).onFalse(m_lightSubystem.setSingleLEDCommand(0, 0, 0));
-    m_driverController.b().onTrue(m_lightSubystem.setAllLEDCommand(255, 0, 0)).onFalse(m_lightSubystem.setAllLEDCommand(0, 0, 0));
-    m_driverController.x().onTrue(m_lightSubystem.setSingleLEDAdjustableCommand()).onFalse(m_lightSubystem.setSingleLEDCommand(0, 0, 0));
-    m_driverController.y().onTrue(m_lightSubystem.setAllLEDAdjustableCommand()).onFalse(m_lightSubystem.setAllLEDCommand(0, 0, 0));
+    
+    // Have the 'b' button set all of the LEDs to Red
+
+
+    // Have the 'x' button set the single LED specified in Shuffleboard to the color specified in Shuffleboard
+
+
+    // Have the 'y' button set all the LEDs to the color specified in Shuffleboard
+
+
+    // Have the 'leftBumper' set the back left LEDs to Green
     m_driverController.leftBumper().onTrue(m_lightSubystem.setBackLeftLEDCommand(255, 255, 0)).onFalse(m_lightSubystem.setBackLeftLEDCommand(0, 0, 0));
+
+    // Have the 'leftTrigger', after it passes 0.5 threshold, set the front left LEDs to Green
     m_driverController.leftTrigger(0.5).onTrue(m_lightSubystem.setFrontLeftLEDCommand(255, 255, 0)).onFalse(m_lightSubystem.setFrontLeftLEDCommand(0, 0, 0));
-    m_driverController.rightBumper().onTrue(m_lightSubystem.setBackRightLEDCommand(255, 255, 0)).onFalse(m_lightSubystem.setBackRightLEDCommand(0, 0, 0));
-    m_driverController.rightTrigger(0.5).onTrue(m_lightSubystem.setFrontRightLEDCommand(255, 255, 0)).onFalse(m_lightSubystem.setFrontRightLEDCommand(0, 0, 0));
+
+    // Have the 'rightBumper' set the back right LEDs to Green
+
+    
+    // Have the 'rightTrigger', after it passes 0.5 threshold, set the front right LEDs to Green
   }
 
   public Command turnLightsOffCommand() {

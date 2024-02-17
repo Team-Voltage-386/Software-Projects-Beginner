@@ -15,11 +15,10 @@ public class SetLEDCommand extends Command {
     this.m_r = r;
     this.m_g = g;
     this.m_b = b;
-    // Use addRequirements() here to declare subsystem dependencies.
+
     addRequirements(subsystem);
   }
 
-  // Called when the command is initially scheduled.
   @Override
   public void initialize() {
     int index = this.m_subsystem.getSingleLEDIndex();

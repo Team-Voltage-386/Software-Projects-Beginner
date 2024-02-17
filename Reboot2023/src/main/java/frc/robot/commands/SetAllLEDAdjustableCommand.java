@@ -16,10 +16,11 @@ public class SetAllLEDAdjustableCommand extends Command {
 
   @Override
   public void initialize() {
-    int r = this.m_subsystem.getAdjustableLEDR();
-    int g = this.m_subsystem.getAdjustableLEDG();
-    int b = this.m_subsystem.getAdjustableLEDB();
-    this.m_subsystem.setAllLED(r, g, b);
+    // Get the R, G, B from Light Subystem by calling:
+    // getAdjustableLEDR
+    // getAdjustableLEDG
+    // getAdjustableLEDB
+    // Then, call setAllLED(r, g, b)
   }
 
   @Override

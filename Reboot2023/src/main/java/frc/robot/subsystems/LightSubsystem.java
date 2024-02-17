@@ -11,15 +11,9 @@ import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.commands.SetAllLEDAdjustableCommand;
-import frc.robot.commands.SetAllLEDCommand;
-import frc.robot.commands.SetBackLeftLEDCommand;
-import frc.robot.commands.SetBackRightLEDCommand;
-import frc.robot.commands.SetFrontLeftLEDCommand;
-import frc.robot.commands.SetFrontRightLEDCommand;
-import frc.robot.commands.SetLEDAdjustableCommand;
 import frc.robot.commands.SetLEDCommand;
 
 public class LightSubsystem extends SubsystemBase {
@@ -44,57 +38,44 @@ public class LightSubsystem extends SubsystemBase {
       .withProperties(Map.of("min", 0, "max", this.getLEDBufferLength()))
       .getEntry();
 
-    m_setLEDR = Shuffleboard.getTab(getName())
-      .add("Adjustable LED R", 0)
-      .withPosition(3, 0)
-      .withSize(2, 1)
-      .withProperties(Map.of("min", 0, "max", 255))
-      .getEntry();
+    // Add "Adjustable LED R" to Shuffleboard
+    // m_setLEDR = ;
 
-    m_setLEDG = Shuffleboard.getTab(getName())
-      .add("Adjustable LED G", 0)
-      .withPosition(3, 1)
-      .withSize(2, 1)
-      .withProperties(Map.of("min", 0, "max", 255))
-      .getEntry();
+    // Add "Adjustable LED G" to Shuffleboard
+    // m_setLEDG = ;
 
-    m_setLEDB = Shuffleboard.getTab(getName())
-      .add("Adjustable LED B", 0)
-      .withPosition(3, 2)
-      .withSize(2, 1)
-      .withProperties(Map.of("min", 0, "max", 255))
-      .getEntry();
+    // Add "Adjustable LED B" to Shuffleboard
+    // m_setLEDB = ;
   }
 
   public void setLED(int index, int r, int g, int b) {
     /*
      * Set LED 'index' to the color (r, g, b)
      */
-    if (index < this.m_ledBuffer.getLength()) {
-      this.m_ledBuffer.setRGB(index, r, g, b);
-      this.m_led.setData(this.m_ledBuffer);
-    }
+    
     return;
   }
 
   public void setAllLED(int r, int g, int b) {
-    for (int i = 0; i < this.getLEDBufferLength(); i++) {
-      this.m_ledBuffer.setRGB(i, r, g, b);
-    }
-    this.m_led.setData(this.m_ledBuffer);
+    /*
+     * Set all LEDs to the color (r, g, b)
+     */
+
     return;
   }
 
   public void setRangeLED(int startIndex, int endIndex, int r, int g, int b) {
-    for (int i = startIndex; i < this.getLEDBufferLength() && i < endIndex; i++) {
-      this.m_ledBuffer.setRGB(i, r, g, b);
-    }
-    this.m_led.setData(this.m_ledBuffer);
+    /*
+     * Set all LEDs in the range [startIndex, endIndex) to the color (r, g, b)
+     * For example, if the startIndex = 1 and the endIndex = 3, then you would set indexes (1, 2)
+     */
+
     return;
   }
 
   public int getLEDBufferLength() {
-    return this.m_ledBuffer.getLength();
+    // Return the length of the LED Buffer
+    return 0;
   }
 
   public int getSingleLEDIndex() {
@@ -107,30 +88,24 @@ public class LightSubsystem extends SubsystemBase {
   }
 
   public int getAdjustableLEDR() {
-    long r = this.m_setLEDR.getInteger(0);
-    if (r >= 0 && r <= 255) {
-      return (int)r;
-    } else {
-      return 0;
-    }
+    /*
+     * Get the R value from the m_setLEDR Generic Entry
+     */
+    return 0;
   }
 
   public int getAdjustableLEDG() {
-    long g = this.m_setLEDG.getInteger(0);
-    if (g >= 0 && g <= 255) {
-      return (int)g;
-    } else {
-      return 0;
-    }
+    /*
+     * Get the G value from the m_setLEDR Generic Entry
+     */
+    return 0;
   }
 
   public int getAdjustableLEDB() {
-    long b = this.m_setLEDB.getInteger(0);
-    if (b >= 0 && b <= 255) {
-      return (int)b;
-    } else {
-      return 0;
-    }
+    /*
+     * Get the B value from the m_setLEDR Generic Entry
+     */
+    return 0;
   }
 
   public Command setSingleLEDCommand(int r, int g, int b) {
@@ -138,40 +113,51 @@ public class LightSubsystem extends SubsystemBase {
   }
 
   public Command setAllLEDCommand(int r, int g, int b) {
-    return new SetAllLEDCommand(this, r, g, b);
+    /*
+     * Return a new SetAllLEDCommand
+     */
+    return Commands.runOnce(() -> { System.out.println ("NOT IMPLEMENTED"); });
   }
 
   public Command setFrontLeftLEDCommand(int r, int g, int b) {
-    return new SetFrontLeftLEDCommand(this, r, g, b);
+    /*
+     * Return a new FrontLeftLEDCommand
+     */
+    return Commands.runOnce(() -> { System.out.println ("NOT IMPLEMENTED"); });
   }
 
   public Command setBackLeftLEDCommand(int r, int g, int b) {
-    return new SetBackLeftLEDCommand(this, r, g, b);
+    /*
+     * Return a new SetBackLeftLEDCommand
+     */
+    return Commands.runOnce(() -> { System.out.println ("NOT IMPLEMENTED"); });
   }
 
   public Command setFrontRightLEDCommand(int r, int g, int b) {
-    return new SetFrontRightLEDCommand(this, r, g, b);
+    /*
+     * Return a new SetFrontRightLEDCommand
+     */
+    return Commands.runOnce(() -> { System.out.println ("NOT IMPLEMENTED"); });
   }
 
   public Command setBackRightLEDCommand(int r, int g, int b) {
-    return new SetBackRightLEDCommand(this, r, g, b);
+    /*
+     * Return a new SetBackRightLEDCommand
+     */
+    return Commands.runOnce(() -> { System.out.println ("NOT IMPLEMENTED"); });
   }
 
   public Command setSingleLEDAdjustableCommand() {
-    return new SetLEDAdjustableCommand(this);
+    /*
+     * Return a new SetLEDAdjustableCommand
+     */
+    return Commands.runOnce(() -> { System.out.println ("NOT IMPLEMENTED"); });
   }
 
   public Command setAllLEDAdjustableCommand() {
-    return new SetAllLEDAdjustableCommand(this);
-  }
-
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-  }
-
-  @Override
-  public void simulationPeriodic() {
-    // This method will be called once per scheduler run during simulation
+    /*
+     * Return a new SetAllLEDAdjustableCommand
+     */
+    return Commands.runOnce(() -> { System.out.println ("NOT IMPLEMENTED"); });
   }
 }
