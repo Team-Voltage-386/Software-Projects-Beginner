@@ -6,6 +6,7 @@ package frc.robot;
 
 import frc.robot.subsystems.LightSubsystem;
 import frc.robot.Constants.OperatorConstants;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -40,9 +41,21 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
+
     m_driverController.a().onTrue(m_lightSubystem.setSingleLEDCommand(255, 0, 0)).onFalse(m_lightSubystem.setSingleLEDCommand(0, 0, 0));
     m_driverController.b().onTrue(m_lightSubystem.setAllLEDCommand(255, 0, 0)).onFalse(m_lightSubystem.setAllLEDCommand(0, 0, 0));
     m_driverController.x().onTrue(m_lightSubystem.setSingleLEDAdjustableCommand()).onFalse(m_lightSubystem.setSingleLEDCommand(0, 0, 0));
     m_driverController.y().onTrue(m_lightSubystem.setAllLEDAdjustableCommand()).onFalse(m_lightSubystem.setAllLEDCommand(0, 0, 0));
+    m_driverController.leftBumper().onTrue(m_lightSubystem.setBackLeftLEDCommand(255, 255, 0)).onFalse(m_lightSubystem.setBackLeftLEDCommand(0, 0, 0));
+    m_driverController.leftTrigger(0.5).onTrue(m_lightSubystem.setFrontLeftLEDCommand(255, 255, 0)).onFalse(m_lightSubystem.setFrontLeftLEDCommand(0, 0, 0));
+    m_driverController.rightBumper().onTrue(m_lightSubystem.setBackRightLEDCommand(255, 255, 0)).onFalse(m_lightSubystem.setBackRightLEDCommand(0, 0, 0));
+    m_driverController.rightTrigger(0.5).onTrue(m_lightSubystem.setFrontRightLEDCommand(255, 255, 0)).onFalse(m_lightSubystem.setFrontRightLEDCommand(0, 0, 0));
+  }
+
+  public Command turnLightsOffCommand() {
+    // Normally, commands can't run when the robot is disabled
+    // In this case, we want to be able to turn the lights off when the robot is disabled
+    // This is how you can allow commands to run when disabled
+    return this.m_lightSubystem.setAllLEDCommand(0, 0, 0).ignoringDisable(true);
   }
 }

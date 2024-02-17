@@ -19,8 +19,16 @@ public final class Constants {
 
   public static class LightSubsystem {
     // What's the PWN port?
-    public static final int kPwnPort = 0;
+    public static final int kPwnPort = 9;
     // How many LEDs are there?
-    public static final int kLEDBufferLen = 10;
+    public static final int kLEDBufferLen = 146;
+    public static final int kLEDFrontLeftStart = 0;
+    public static final int kLEDFrontLeftEnd = kLEDFrontLeftStart + 31;
+    public static final int kLEDBackLeftStart = kLEDFrontLeftEnd;
+    public static final int kLEDBackLeftEnd = kLEDBackLeftStart + 31;
+    public static final int kLEDBackRightStart = kLEDBackLeftEnd;
+    public static final int kLEDBackRightEnd = kLEDBackRightStart + 31;
+    public static final int kLEDFrontRightStart = kLEDBackRightEnd;
+    public static final int kLEDFrontRightEnd = kLEDFrontRightStart + 31;
   }
 }

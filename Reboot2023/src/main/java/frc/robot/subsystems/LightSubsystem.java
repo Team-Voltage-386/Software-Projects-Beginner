@@ -15,6 +15,10 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.commands.SetAllLEDAdjustableCommand;
 import frc.robot.commands.SetAllLEDCommand;
+import frc.robot.commands.SetBackLeftLEDCommand;
+import frc.robot.commands.SetBackRightLEDCommand;
+import frc.robot.commands.SetFrontLeftLEDCommand;
+import frc.robot.commands.SetFrontRightLEDCommand;
 import frc.robot.commands.SetLEDAdjustableCommand;
 import frc.robot.commands.SetLEDCommand;
 
@@ -75,8 +79,17 @@ public class LightSubsystem extends SubsystemBase {
 
   public void setAllLED(int r, int g, int b) {
     for (int i = 0; i < this.getLEDBufferLength(); i++) {
-      this.setLED(i, r, g, b);
+      this.m_ledBuffer.setRGB(i, r, g, b);
     }
+    this.m_led.setData(this.m_ledBuffer);
+    return;
+  }
+
+  public void setRangeLED(int startIndex, int endIndex, int r, int g, int b) {
+    for (int i = startIndex; i < this.getLEDBufferLength() && i < endIndex; i++) {
+      this.m_ledBuffer.setRGB(i, r, g, b);
+    }
+    this.m_led.setData(this.m_ledBuffer);
     return;
   }
 
@@ -126,6 +139,22 @@ public class LightSubsystem extends SubsystemBase {
 
   public Command setAllLEDCommand(int r, int g, int b) {
     return new SetAllLEDCommand(this, r, g, b);
+  }
+
+  public Command setFrontLeftLEDCommand(int r, int g, int b) {
+    return new SetFrontLeftLEDCommand(this, r, g, b);
+  }
+
+  public Command setBackLeftLEDCommand(int r, int g, int b) {
+    return new SetBackLeftLEDCommand(this, r, g, b);
+  }
+
+  public Command setFrontRightLEDCommand(int r, int g, int b) {
+    return new SetFrontRightLEDCommand(this, r, g, b);
+  }
+
+  public Command setBackRightLEDCommand(int r, int g, int b) {
+    return new SetBackRightLEDCommand(this, r, g, b);
   }
 
   public Command setSingleLEDAdjustableCommand() {
