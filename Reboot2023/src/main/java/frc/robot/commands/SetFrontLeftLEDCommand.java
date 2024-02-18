@@ -6,7 +6,7 @@ import frc.robot.subsystems.LightSubsystem;
 
 /** An example command that uses an example subsystem. */
 public class SetFrontLeftLEDCommand extends Command {
-  @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
+  @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
   private final LightSubsystem m_subsystem;
   private final int m_startLEDIndex;
   private final int m_endLEDIndex;

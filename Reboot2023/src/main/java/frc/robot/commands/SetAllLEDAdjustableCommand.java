@@ -5,7 +5,7 @@ import frc.robot.subsystems.LightSubsystem;
 
 /** An example command that uses an example subsystem. */
 public class SetAllLEDAdjustableCommand extends Command {
-  @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
+  @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
   private final LightSubsystem m_subsystem;
 
   public SetAllLEDAdjustableCommand(LightSubsystem subsystem) {
