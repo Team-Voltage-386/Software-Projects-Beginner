@@ -31,39 +31,39 @@ public class LightSubsystem extends SubsystemBase {
   private GenericEntry m_setLEDB;
 
   public LightSubsystem() {
-    m_led = new AddressableLED(Constants.LightSubsystem.kPwnPort);
+    m_led = new AddressableLED(Constants.LightSubsystem.kPwmPort);
     m_ledBuffer = new AddressableLEDBuffer(Constants.LightSubsystem.kLEDBufferLen);
     m_led.setLength(m_ledBuffer.getLength());
     m_led.setData(m_ledBuffer);
     m_led.start();
 
     m_setLEDIndex = Shuffleboard.getTab(getName())
-      .add("Set Single LED Index", 0)
-      .withPosition(0, 0)
-      .withSize(2, 1)
-      .withProperties(Map.of("min", 0, "max", this.getLEDBufferLength()))
-      .getEntry();
+        .add("Set Single LED Index", 0)
+        .withPosition(0, 0)
+        .withSize(2, 1)
+        .withProperties(Map.of("min", 0, "max", this.getLEDBufferLength()))
+        .getEntry();
 
     m_setLEDR = Shuffleboard.getTab(getName())
-      .add("Adjustable LED R", 0)
-      .withPosition(3, 0)
-      .withSize(2, 1)
-      .withProperties(Map.of("min", 0, "max", 255))
-      .getEntry();
+        .add("Adjustable LED R", 0)
+        .withPosition(3, 0)
+        .withSize(2, 1)
+        .withProperties(Map.of("min", 0, "max", 255))
+        .getEntry();
 
     m_setLEDG = Shuffleboard.getTab(getName())
-      .add("Adjustable LED G", 0)
-      .withPosition(3, 1)
-      .withSize(2, 1)
-      .withProperties(Map.of("min", 0, "max", 255))
-      .getEntry();
+        .add("Adjustable LED G", 0)
+        .withPosition(3, 1)
+        .withSize(2, 1)
+        .withProperties(Map.of("min", 0, "max", 255))
+        .getEntry();
 
     m_setLEDB = Shuffleboard.getTab(getName())
-      .add("Adjustable LED B", 0)
-      .withPosition(3, 2)
-      .withSize(2, 1)
-      .withProperties(Map.of("min", 0, "max", 255))
-      .getEntry();
+        .add("Adjustable LED B", 0)
+        .withPosition(3, 2)
+        .withSize(2, 1)
+        .withProperties(Map.of("min", 0, "max", 255))
+        .getEntry();
   }
 
   public void setLED(int index, int r, int g, int b) {
@@ -100,7 +100,7 @@ public class LightSubsystem extends SubsystemBase {
   public int getSingleLEDIndex() {
     long index = this.m_setLEDIndex.getInteger(0);
     if (index > Integer.MIN_VALUE && index < Integer.MAX_VALUE) {
-      return (int)index;
+      return (int) index;
     } else {
       return 0;
     }
@@ -109,7 +109,7 @@ public class LightSubsystem extends SubsystemBase {
   public int getAdjustableLEDR() {
     long r = this.m_setLEDR.getInteger(0);
     if (r >= 0 && r <= 255) {
-      return (int)r;
+      return (int) r;
     } else {
       return 0;
     }
@@ -118,7 +118,7 @@ public class LightSubsystem extends SubsystemBase {
   public int getAdjustableLEDG() {
     long g = this.m_setLEDG.getInteger(0);
     if (g >= 0 && g <= 255) {
-      return (int)g;
+      return (int) g;
     } else {
       return 0;
     }
@@ -127,7 +127,7 @@ public class LightSubsystem extends SubsystemBase {
   public int getAdjustableLEDB() {
     long b = this.m_setLEDB.getInteger(0);
     if (b >= 0 && b <= 255) {
-      return (int)b;
+      return (int) b;
     } else {
       return 0;
     }
