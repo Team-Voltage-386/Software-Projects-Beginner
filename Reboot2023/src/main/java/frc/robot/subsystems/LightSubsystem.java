@@ -21,6 +21,7 @@ import frc.robot.commands.SetFrontLeftLEDCommand;
 import frc.robot.commands.SetFrontRightLEDCommand;
 import frc.robot.commands.SetLEDAdjustableCommand;
 import frc.robot.commands.SetLEDCommand;
+import frc.robot.commands.SetRainbowCommand;
 
 public class LightSubsystem extends SubsystemBase {
   private AddressableLED m_led;
@@ -29,6 +30,7 @@ public class LightSubsystem extends SubsystemBase {
   private GenericEntry m_setLEDR;
   private GenericEntry m_setLEDG;
   private GenericEntry m_setLEDB;
+  private static int m_rainbowFirstPixelHue;
 
   public LightSubsystem() {
     m_led = new AddressableLED(Constants.LightSubsystem.kPwmPort);
@@ -74,6 +76,25 @@ public class LightSubsystem extends SubsystemBase {
       this.m_ledBuffer.setRGB(index, r, g, b);
       this.m_led.setData(this.m_ledBuffer);
     }
+    return;
+  }
+
+  public void rainbow() {
+    // For every pixel
+    for (var i = 0; i < m_ledBuffer.getLength(); i++) {
+      // Calculate the hue - hue is easier for rainbows because the color
+      // shape is a circle so only one value needs to precess
+      final var hue = (m_rainbowFirstPixelHue + (i * 180 / m_ledBuffer.getLength())) % 180;
+      // Set the value
+      m_ledBuffer.setHSV(i, hue, 255, 128);
+    }
+    // Increase by to make the rainbow "move"
+    m_rainbowFirstPixelHue += 3;
+    // Check bounds
+    m_rainbowFirstPixelHue %= 180;
+    this.m_led.setData(this.m_ledBuffer);
+    System.out.println("end of the rainbow");
+    System.out.println("m_rainbowFirstPixelHue: " + m_rainbowFirstPixelHue);
     return;
   }
 
@@ -135,6 +156,10 @@ public class LightSubsystem extends SubsystemBase {
 
   public Command setSingleLEDCommand(int r, int g, int b) {
     return new SetLEDCommand(this, r, g, b);
+  }
+
+  public Command setRainbowCommand() {
+    return new SetRainbowCommand(this);
   }
 
   public Command setAllLEDCommand(int r, int g, int b) {
