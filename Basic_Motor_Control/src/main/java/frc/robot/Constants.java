@@ -22,6 +22,6 @@ public final class Constants {
   }
 
   public static class Motor {
-    public static final int kCANID = 0;
+    public static final int kCANID = 12;
   }
 }

@@ -12,12 +12,11 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
-import frc.robot.commands.AddMotorVoltageCommand;
 import frc.robot.commands.MotorRunCommand;
-import frc.robot.commands.RemoveMotorVoltageCommand;
 
 public class MotorSubsystem extends SubsystemBase {
   private GenericEntry m_voltageGenericEntry;
+  private GenericEntry m_voltageOutputGenericEntry;
   private GenericEntry m_incDecAmountGenericEntry;
   private GenericEntry m_incrementVoltageGenericEntry;
   private GenericEntry m_decrementVoltageGenericEntry;
@@ -29,8 +28,11 @@ public class MotorSubsystem extends SubsystemBase {
   private static final double EPSILON = 0.001;
 
   public MotorSubsystem() {
-    this.m_voltageGenericEntry = Shuffleboard.getTab(getName()).add("Voltage", 0.0).withPosition(3, 0).withSize(2, 1)
+    this.m_voltageGenericEntry = Shuffleboard.getTab(getName()).add("Input Voltage", 0.0).withPosition(3, 0)
+        .withSize(2, 1)
         .getEntry();
+    this.m_voltageOutputGenericEntry = Shuffleboard.getTab(getName()).add("Output Voltage", 0.0).withPosition(0, 0)
+        .withSize(2, 1).getEntry();
     this.m_incDecAmountGenericEntry = Shuffleboard.getTab(getName()).add("Inc_Dec Amount", 0.1).withPosition(6, 1)
         .withSize(1, 1).getEntry();
     this.m_incrementVoltageGenericEntry = Shuffleboard.getTab(getName()).add("Inc", false).withPosition(4, 1)
@@ -61,13 +63,13 @@ public class MotorSubsystem extends SubsystemBase {
 
     new Trigger(() -> {
       return this.m_incrementVoltageGenericEntry.getBoolean(false);
-    }).onTrue(new AddMotorVoltageCommand(this).andThen(Commands.runOnce(() -> {
+    }).onTrue(Commands.runOnce(() -> this.incrementVoltageGenericEntry()).andThen(Commands.runOnce(() -> {
       this.m_incrementVoltageGenericEntry.setBoolean(false);
     })).ignoringDisable(true));
 
     new Trigger(() -> {
       return this.m_decrementVoltageGenericEntry.getBoolean(false);
-    }).onTrue(new RemoveMotorVoltageCommand(this).andThen(Commands.runOnce(() -> {
+    }).onTrue(Commands.runOnce(() -> this.decrementVoltageGenericEntry()).andThen(Commands.runOnce(() -> {
       this.m_decrementVoltageGenericEntry.setBoolean(false);
     })).ignoringDisable(true));
   }
@@ -114,5 +116,10 @@ public class MotorSubsystem extends SubsystemBase {
 
   public void stopMotor() {
     this.m_askedToRunMotors = false;
+  }
+
+  @Override
+  public void periodic() {
+    m_voltageOutputGenericEntry.setDouble(this.getMotorVoltage());
   }
 }
