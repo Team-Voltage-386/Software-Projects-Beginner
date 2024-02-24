@@ -1,10 +1,13 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -22,9 +25,12 @@ public class MotorSubsystem extends SubsystemBase {
   private GenericEntry m_decrementVoltageGenericEntry;
   private GenericEntry m_doRunMotorsGenericEntry;
   private GenericEntry m_areMotorsRunningGenericEntry;
+  private GenericEntry m_motorAccelGenericEntry;
+  private GenericEntry m_goalAccelMet;
   private CANSparkMax m_motor;
   private boolean m_askedToRunMotors;
   private Command m_motorRunCommand;
+  private SlewRateLimiter m_slewRateLimiter;
   private static final double EPSILON = 0.001;
 
   public MotorSubsystem() {
@@ -44,7 +50,12 @@ public class MotorSubsystem extends SubsystemBase {
         .withWidget(BuiltInWidgets.kToggleButton).getEntry();
     this.m_areMotorsRunningGenericEntry = Shuffleboard.getTab(getName()).add("Are motors running?", false)
         .withPosition(0, 3).withSize(2, 1).withWidget(BuiltInWidgets.kBooleanBox).getEntry();
+    this.m_motorAccelGenericEntry = Shuffleboard.getTab(getName()).add("Motor Accel", 0.0).withPosition(3, 3)
+        .withSize(2, 1).getEntry();
+    this.m_goalAccelMet = Shuffleboard.getTab(getName()).add("has met accel", false).withPosition(3, 4).withSize(2, 1)
+        .getEntry();
     this.m_motor = new CANSparkMax(Constants.Motor.kCANID, MotorType.kBrushless);
+    this.m_motor.setIdleMode(IdleMode.kBrake);
     this.m_askedToRunMotors = false;
     this.m_motorRunCommand = new MotorRunCommand(this);
 
@@ -72,6 +83,7 @@ public class MotorSubsystem extends SubsystemBase {
     }).onTrue(Commands.runOnce(() -> this.decrementVoltageGenericEntry()).andThen(Commands.runOnce(() -> {
       this.m_decrementVoltageGenericEntry.setBoolean(false);
     })).ignoringDisable(true));
+    m_slewRateLimiter = new SlewRateLimiter(40);
   }
 
   public double getVoltage() {
@@ -81,6 +93,33 @@ public class MotorSubsystem extends SubsystemBase {
     } else {
       return res;
     }
+  }
+
+  // time, velo, accel
+  double previousMotorData[] = { Timer.getFPGATimestamp(), 0, 0 };
+
+  /**
+   * @return returns acceleration of bottom motor
+   */
+  public void updateShooterAcceleration() {
+    double[] now = { Timer.getFPGATimestamp(), m_motor.getEncoder().getVelocity(), 0 };
+    if (now[1] != previousMotorData[1]) {
+      double accel = (now[1] - previousMotorData[1]) / (now[0] -
+          previousMotorData[0]);
+      now[2] = m_slewRateLimiter.calculate(accel);
+      previousMotorData = now;
+    }
+  }
+
+  /**
+   * @return returns if we have shot the note
+   */
+  public boolean hasShotNote() {
+    // if (Flags.pieceState.equals(Flags.subsystemsStates.loadedPiece) && shoot
+    if (previousMotorData[2] < -3) {
+      return true;
+    } else
+      return false;
   }
 
   public boolean doRunMotor() {
@@ -120,6 +159,9 @@ public class MotorSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
+    updateShooterAcceleration();
+    m_goalAccelMet.setBoolean(previousMotorData[2] < -3);
     m_voltageOutputGenericEntry.setDouble(this.getMotorVoltage());
+    m_motorAccelGenericEntry.setDouble(this.previousMotorData[2]);
   }
 }
