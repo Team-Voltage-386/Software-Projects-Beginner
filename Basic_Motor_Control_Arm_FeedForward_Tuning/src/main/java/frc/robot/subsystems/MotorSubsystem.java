@@ -68,9 +68,9 @@ public class MotorSubsystem extends SubsystemBase {
     this.m_motor = new CANSparkMax(Constants.Motor.kCANID, MotorType.kBrushless);
     this.m_motor.setIdleMode(IdleMode.kCoast);
     this.m_motor.getEncoder().setPositionConversionFactor(Math.PI * 2 * 1 /
-        12.5);
+        12.75);
     this.m_motor.getEncoder().setVelocityConversionFactor(Math.PI * 2 * 1.0 /
-        12.5 * 1.0 / 60.0);
+        12.75 * 1.0 / 60.0);
     this.m_motor.getEncoder().setPosition(Math.toRadians(270));
 
     this.m_armFeedforward = new ArmFeedforward(0.0, 0.0, 0.0);
