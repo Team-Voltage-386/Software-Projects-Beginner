@@ -28,6 +28,7 @@ public class MotorSubsystem extends SubsystemBase {
   private static final double EPSILON = 0.001;
 
   public MotorSubsystem() {
+    // Set up Shuffleboard
     this.m_voltageGenericEntry = Shuffleboard.getTab(getName()).add("Input Voltage", 0.0).withPosition(3, 0)
         .withSize(2, 1)
         .getEntry();
@@ -44,22 +45,47 @@ public class MotorSubsystem extends SubsystemBase {
         .withWidget(BuiltInWidgets.kToggleButton).getEntry();
     this.m_areMotorsRunningGenericEntry = Shuffleboard.getTab(getName()).add("Are motors running?", false)
         .withPosition(0, 3).withSize(2, 1).withWidget(BuiltInWidgets.kBooleanBox).getEntry();
+
+    // Set up motor state
     this.m_motor = new CANSparkMax(Constants.Motor.kCANID, MotorType.kBrushless);
     this.m_askedToRunMotors = false;
     this.m_motorRunCommand = new MotorRunCommand(this);
 
-    new Trigger(() -> this.m_askedToRunMotors).and(this::doRunMotor)
-        .whileTrue(m_motorRunCommand).onFalse(runOnce(() -> {
-          this.setMotorVoltage(0.0);
-        }).ignoringDisable(true));
+    // when the robot is not disabled and you've clicked the button on shuffleboard
+    // to run the motors, the motor voltage is set based on the value on
+    // shuffleboard
+    // otherwise, the voltage is set to zero
 
-    new Trigger(() -> {
-      return Math.abs(this.getMotorVoltage()) < EPSILON;
-    }).onTrue(Commands.runOnce(() -> {
-      this.m_areMotorsRunningGenericEntry.setBoolean(false);
-    }).ignoringDisable(true)).onFalse(Commands.runOnce(() -> {
-      this.m_areMotorsRunningGenericEntry.setBoolean(true);
-    }).ignoringDisable(true));
+    // Note that the voltage is set to zero when the robot is disabled
+    new Trigger(() -> this.m_askedToRunMotors).and(this::doRunMotor)
+        .whileTrue(m_motorRunCommand).onFalse(
+            runOnce(
+                () -> {
+                  this.setMotorVoltage(0.0);
+                }).ignoringDisable(true));
+
+    // sets a visual indicator on shuffleboard when the motor voltage is greater
+    // than EPSILON
+    new Trigger(
+        () -> {
+          return Math.abs(this.getMotorVoltage()) < EPSILON;
+        }).onTrue(
+            Commands.runOnce(
+                () -> {
+                  this.m_areMotorsRunningGenericEntry.setBoolean(false);
+                }).ignoringDisable(true))
+        .onFalse(
+            Commands.runOnce(
+                () -> {
+                  this.m_areMotorsRunningGenericEntry.setBoolean(true);
+                }).ignoringDisable(true));
+
+    // When the increment voltage button is pressed, the voltage is incremented
+    //
+    // Note: In shuffleboard buttons are toggles, i.e press once and it turns on.
+    // Press again to turn it off. This trigger makes it so that press once it turns
+    // on (and increments) and then it turns it off automatically so the next time
+    // you press the button it'll increment again.
 
     new Trigger(() -> {
       return this.m_incrementVoltageGenericEntry.getBoolean(false);
@@ -67,6 +93,7 @@ public class MotorSubsystem extends SubsystemBase {
       this.m_incrementVoltageGenericEntry.setBoolean(false);
     })).ignoringDisable(true));
 
+    // Decrement the voltage (see comment above)
     new Trigger(() -> {
       return this.m_decrementVoltageGenericEntry.getBoolean(false);
     }).onTrue(Commands.runOnce(() -> this.decrementVoltageGenericEntry()).andThen(Commands.runOnce(() -> {
@@ -74,6 +101,12 @@ public class MotorSubsystem extends SubsystemBase {
     })).ignoringDisable(true));
   }
 
+  /**
+   * reads the voltage entered by the user
+   * 
+   * @return the voltage. If the entered voltage is less than EPSILON it returns
+   *         zero
+   */
   public double getVoltage() {
     double res = this.m_voltageGenericEntry.getDouble(0.0);
     if (Math.abs(res) < EPSILON) {
@@ -83,18 +116,41 @@ public class MotorSubsystem extends SubsystemBase {
     }
   }
 
+  /**
+   * Checks shuffleboard button to start the motor
+   * 
+   * @return the state of the button
+   */
   public boolean doRunMotor() {
     return this.m_doRunMotorsGenericEntry.getBoolean(false);
   }
 
+  /**
+   * this will read the actual voltage that the motor reports which may be
+   * slightly different from the voltage requested.
+   * 
+   * @return
+   */
   public double getMotorVoltage() {
     return this.m_motor.getAppliedOutput();
+
   }
 
+  /**
+   * Sets the voltage of the motor
+   * 
+   * @param voltage
+   */
   public void setMotorVoltage(double voltage) {
     this.m_motor.setVoltage(voltage);
   }
 
+  /**
+   * reads the value from shuffleboard and ensures it's between 0-1 (in order to
+   * limit how much the user can increment the voltage)
+   * 
+   * @return the clamped value
+   */
   public double getAndUpdateIncDecAmount() {
     double val = this.m_incDecAmountGenericEntry.getDouble(0.0);
     double clampedVal = MathUtil.clamp(val, 0.0, 1.0);
@@ -118,6 +174,9 @@ public class MotorSubsystem extends SubsystemBase {
     this.m_askedToRunMotors = false;
   }
 
+  /**
+   * updates the shuffleboard object with the motor voltage
+   */
   @Override
   public void periodic() {
     m_voltageOutputGenericEntry.setDouble(this.getMotorVoltage());
