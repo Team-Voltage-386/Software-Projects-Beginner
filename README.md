@@ -1,5 +1,7 @@
 # Hello beginners! Let's get started!
 
+Note: when you want to open a sub-project folder that contains java code, open a copy of VS Code and open just the specific folder you are interested in (not the entire software-projects-beginner folder)
+
 1. [Take the codecademy beginner java course.](./Codecademy-Course-Learn-Java/)
 2. [Solve your first programming challenge at leetcode.](./Leetcode-2Sum-Easy)
 3. [Compile Java locally and use the JShell.](./Compile-Locally-And-Use-JShell)
