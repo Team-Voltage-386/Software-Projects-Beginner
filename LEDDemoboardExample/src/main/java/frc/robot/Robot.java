@@ -69,10 +69,12 @@ public class Robot extends TimedRobot {
 
     @Override
     public void disabledPeriodic() {
-        //System.out.println("Robot.disabledPeriodic()");
-        if (m_robotContainer.areLightsOn()) {
-            m_robotContainer.turnLightsOffCommand().schedule();
-        }
+        
+        // Uncommenting the following lines causes loop overruns!
+
+        // if (m_robotContainer.areLightsOn()) {
+        //     m_robotContainer.turnLightsOffCommand().schedule();
+        // }
     }
 
     /**
