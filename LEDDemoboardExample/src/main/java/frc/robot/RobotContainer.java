@@ -60,7 +60,9 @@ public class RobotContainer {
     private void configureBindings() {
         // Schedule `changeAllLEDColor` when the Xbox controller's B button is pressed,
         // cancelling on release.
-        m_driverController.b().whileTrue(m_lightSubsystem.changeAllLEDColor(255,0,0));
+        m_driverController.b().whileTrue(m_lightSubsystem.changeAllLEDColor(255, 0, 0));
+        m_driverController.x().whileTrue(m_lightSubsystem.setAllBlue());
+        m_driverController.y().whileTrue(m_lightSubsystem.changeAllLEDColor(255,0,255));
         // Schedule `changeAllLEDColor` to clear when the Xbox controller's A button is pressed,
         // cancelling on release.
         m_driverController.a().whileTrue(m_lightSubsystem.changeAllLEDColor(0, 0, 0));
