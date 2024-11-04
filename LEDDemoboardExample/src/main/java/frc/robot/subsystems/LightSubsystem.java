@@ -13,8 +13,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.commands.ChangeLEDColorCommand;
 
 public class LightSubsystem extends SubsystemBase {
-    // This should be 1 for the briefcase bot. (EDIT: appears plugged into PWM port 0 for briefcase)
-    // This should be 9 for the Demoboard.
+    // IMPORTANT! 
+    // Modify the port number based on which PWM the LEDs are plugged into
     private static final int kLedPort = 7;
 
     /**
@@ -24,18 +24,14 @@ public class LightSubsystem extends SubsystemBase {
      */
     private static final int kLedLength = 10;
 
-    // PWM port 9
-    // Must be a PWM header, not MXP or DIO
     AddressableLED led = new AddressableLED(kLedPort);
 
-    // Reuse buffer
-    // Default to a length of 10, start empty output
-    // Length is expensive to set, so only set it once, then just update data
     AddressableLEDBuffer ledBuffer = new AddressableLEDBuffer(kLedLength);
 
     /** Creates a new ExampleSubsystem. */
     public LightSubsystem() {
-        // Set the data
+        // Start the LEDs
+        // Length is expensive to set, so only set it once, then just update data
         led.setLength(kLedLength);
         led.setData(ledBuffer);
         led.start();
@@ -67,29 +63,25 @@ public class LightSubsystem extends SubsystemBase {
 
     public Command changeAllLEDColor(int r, int g, int b) {
         ParallelCommandGroup parallelCommandGroup = new ParallelCommandGroup();
-        for (int i = 0; i < ledBuffer.getLength(); i++)
-        {
-            //ledBuffer.setRGB(i, 255 ,0, 0);
-           parallelCommandGroup.addCommands(new ChangeLEDColorCommand(this, i, r, g, b).ignoringDisable(true));
+        for (int i = 0; i < ledBuffer.getLength(); i++) {
+            // ledBuffer.setRGB(i, 255 ,0, 0);
+            parallelCommandGroup.addCommands(new ChangeLEDColorCommand(this, i, r, g, b).ignoringDisable(true));
         }
         return parallelCommandGroup;
     }
 
-    public Command setAllBlue(){
+    public Command setAllBlue() {
         return runOnce(
-        () -> {
-            for (int i = 0; i < ledBuffer.getLength(); i++)
-            {
-                ledBuffer.setRGB(i,0,0,255);
-            }
-        }
-        );
+                () -> {
+                    for (int i = 0; i < ledBuffer.getLength(); i++) {
+                        ledBuffer.setRGB(i, 0, 0, 255);
+                    }
+                });
     }
 
     public void allPurple() {
-        for (int i=0; i < ledBuffer.getLength(); i++)
-        {
-            ledBuffer.setRGB(i,100,0,200);
+        for (int i = 0; i < ledBuffer.getLength(); i++) {
+            ledBuffer.setRGB(i, 100, 0, 200);
         }
     }
 
@@ -107,8 +99,7 @@ public class LightSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
-        // Set the LEDs
-       // allOff();
+        // Send the current values to the LED strip
         led.setData(ledBuffer);
     }
 
