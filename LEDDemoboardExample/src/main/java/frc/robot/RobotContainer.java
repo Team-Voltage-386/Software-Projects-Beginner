@@ -9,6 +9,8 @@ import frc.robot.subsystems.LightSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.*; // imports everything in the commands folder
+
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -20,6 +22,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
     // The robot's subsystems and commands are defined here...
     private final LightSubsystem m_lightSubsystem = new LightSubsystem();
+    private final CycleLED cycleLED = new CycleLED(m_lightSubsystem);
 
     // Replace with CommandPS4Controller or CommandJoystick if needed
     private final CommandXboxController m_driverController = new CommandXboxController(
@@ -52,8 +55,10 @@ public class RobotContainer {
         // Turn the lights on when button held. Turn off when button is released
         m_driverController.y().whileTrue(m_lightSubsystem.changeAllLEDColor(255, 0, 255));
         m_driverController.y().onFalse(m_lightSubsystem.changeAllLEDColor(0, 0, 0));
+        
+        // Cycle between 3 LED colors until interrupted
+        m_driverController.a().toggleOnTrue(cycleLED);
 
-        m_driverController.a().whileTrue(m_lightSubsystem.changeAllLEDColor(0, 0, 0));
         // Note: the setAllBlue command doesn't run when disabled.
         m_driverController.x().whileTrue(m_lightSubsystem.setAllBlue());
 

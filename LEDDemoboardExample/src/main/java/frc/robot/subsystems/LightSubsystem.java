@@ -18,8 +18,8 @@ public class LightSubsystem extends SubsystemBase {
     private static final int kLedPort = 7;
 
     /**
-     * Length of the LED strip
-     * This should be 10 for the briefcase bot
+     * Length of the LED strip.
+     * This should be 10 for the briefcase bot.
      * This should be 76 for the Demoboard.
      */
     private static final int kLedLength = 10;
@@ -28,7 +28,7 @@ public class LightSubsystem extends SubsystemBase {
 
     AddressableLEDBuffer ledBuffer = new AddressableLEDBuffer(kLedLength);
 
-    /** Creates a new ExampleSubsystem. */
+    /** Creates a new LightSubsystem. */
     public LightSubsystem() {
         // Start the LEDs
         // Length is expensive to set, so only set it once, then just update data
