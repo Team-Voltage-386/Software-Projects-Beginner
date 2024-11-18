@@ -69,16 +69,16 @@ public class CycleLED extends Command {
   private void cycleColor(int counter) {
     
     if (counter % 3 == 0) {
-      lightSubsystem.setToColor(8, 255, 0, 0);
-      //lightSubsystem.changeAllLEDColor(255, 0, 0); // Change this to whatever color you please.
+      //lightSubsystem.setToColor(8, 255, 0, 0);
+      lightSubsystem.changeAllLEDColor(255, 0, 0); // Change this to whatever color you please.
       System.out.println("Red");
     } else if (counter % 3 == 1) {
-      lightSubsystem.setToColor(8, 0, 255, 0);
-      //lightSubsystem.changeAllLEDColor(0, 255, 0); // Change this to whatever color you please.
+      //lightSubsystem.setToColor(8, 0, 255, 0);
+      lightSubsystem.changeAllLEDColor(0, 255, 0); // Change this to whatever color you please.
       System.out.println("Green");
     } else {
-      lightSubsystem.setToColor(8, 0, 0, 255);
-      //lightSubsystem.changeAllLEDColor(0, 0, 255); // Change this to whatever color you please.
+      //lightSubsystem.setToColor(8, 0, 0, 255);
+      lightSubsystem.changeAllLEDColor(0, 0, 255); // Change this to whatever color you please.
       System.out.println("Blue");
     }
   }

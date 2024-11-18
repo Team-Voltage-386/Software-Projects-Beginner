@@ -55,19 +55,16 @@ public class LightSubsystem extends SubsystemBase {
         return lightsAreOn;
     }
 
+    public void changeAllLEDColor(int r, int g, int b) {
+        for (int i = 0; i < ledBuffer.getLength(); i++) {
+            setToColor(i, r, g, b);
+        }
+    }
+
     public Command changeLEDColor(int index, int r, int g, int b) {
         // Inline construction of command goes here.
         // Subsystem::RunOnce implicitly requires `this` subsystem.
         return runOnce(() -> new ChangeLEDColorCommand(this, index, r, g, b).ignoringDisable(true));
-    }
-
-    public Command changeAllLEDColor(int r, int g, int b) {
-        ParallelCommandGroup parallelCommandGroup = new ParallelCommandGroup();
-        for (int i = 0; i < ledBuffer.getLength(); i++) {
-            // ledBuffer.setRGB(i, 255 ,0, 0);
-            parallelCommandGroup.addCommands(new ChangeLEDColorCommand(this, i, r, g, b).ignoringDisable(true));
-        }
-        return parallelCommandGroup;
     }
 
     public Command setAllBlue() {
