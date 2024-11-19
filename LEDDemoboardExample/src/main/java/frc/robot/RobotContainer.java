@@ -49,12 +49,12 @@ public class RobotContainer {
     private void configureBindings() {
 
         // Turn the lights on when button pressed. Turn off when button is released
-        m_driverController.b().onTrue(m_lightSubsystem.changeAllLEDColor(255, 0, 0));
-        m_driverController.b().onFalse(m_lightSubsystem.changeAllLEDColor(0, 0, 0));
+       //m_driverController.b().onTrue(m_lightSubsystem.changeAllLEDColor(255, 0, 0));
+        //m_driverController.b().onFalse(m_lightSubsystem.changeAllLEDColor(0, 0, 0));
 
         // Turn the lights on when button held. Turn off when button is released
-        m_driverController.y().whileTrue(m_lightSubsystem.changeAllLEDColor(255, 0, 255));
-        m_driverController.y().onFalse(m_lightSubsystem.changeAllLEDColor(0, 0, 0));
+        //m_driverController.y().whileTrue(m_lightSubsystem.changeAllLEDColor(255, 0, 255));
+        //m_driverController.y().onFalse(m_lightSubsystem.changeAllLEDColor(0, 0, 0));
         
         // Cycle between 3 LED colors until interrupted
         m_driverController.a().toggleOnTrue(cycleLED);
@@ -74,11 +74,11 @@ public class RobotContainer {
         // return Autos.exampleAuto(m_exampleSubsystem);
         return null;
     }
-
+    /* 
     public Command turnLightsOffCommand() {
         return m_lightSubsystem.changeAllLEDColor(0, 0, 0);
     }
-
+*/
     public boolean areLightsOn() {
         return m_lightSubsystem.areLightsOn();
     }
