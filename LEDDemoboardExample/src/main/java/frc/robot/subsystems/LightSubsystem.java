@@ -7,10 +7,8 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.util.Color;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.commands.ChangeLEDColorCommand;
+//import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 
 public class LightSubsystem extends SubsystemBase {
     // IMPORTANT! 
@@ -42,6 +40,12 @@ public class LightSubsystem extends SubsystemBase {
         return;
     }
 
+    public void changeAllLEDColor(int r, int g, int b) {
+        for (int i = 0; i < ledBuffer.getLength(); i++) {
+            setToColor(i, r, g, b);
+        }
+    }
+
     public boolean areLightsOn() {
         // Lights are on if at least one LED has either red, green, or blue that is not
         // 0.
@@ -53,36 +57,6 @@ public class LightSubsystem extends SubsystemBase {
             lightsAreOn |= c.red > 0.1;
         }
         return lightsAreOn;
-    }
-
-    public Command changeLEDColor(int index, int r, int g, int b) {
-        // Inline construction of command goes here.
-        // Subsystem::RunOnce implicitly requires `this` subsystem.
-        return runOnce(() -> new ChangeLEDColorCommand(this, index, r, g, b).ignoringDisable(true));
-    }
-
-    public Command changeAllLEDColor(int r, int g, int b) {
-        ParallelCommandGroup parallelCommandGroup = new ParallelCommandGroup();
-        for (int i = 0; i < ledBuffer.getLength(); i++) {
-            // ledBuffer.setRGB(i, 255 ,0, 0);
-            parallelCommandGroup.addCommands(new ChangeLEDColorCommand(this, i, r, g, b).ignoringDisable(true));
-        }
-        return parallelCommandGroup;
-    }
-
-    public Command setAllBlue() {
-        return runOnce(
-                () -> {
-                    for (int i = 0; i < ledBuffer.getLength(); i++) {
-                        ledBuffer.setRGB(i, 0, 0, 255);
-                    }
-                });
-    }
-
-    public void allPurple() {
-        for (int i = 0; i < ledBuffer.getLength(); i++) {
-            ledBuffer.setRGB(i, 100, 0, 200);
-        }
     }
 
     /**

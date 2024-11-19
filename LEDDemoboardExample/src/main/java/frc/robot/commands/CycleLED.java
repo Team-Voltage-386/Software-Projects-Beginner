@@ -16,7 +16,7 @@ public class CycleLED extends Command {
   private final LightSubsystem lightSubsystem;
   private final Timer timer = new Timer();
   private double lastRecordedTime;
-  private int counter = 1; // counter starts at 1 
+  private int counter = 1; // counter starts at 1
 
   /**
    * Constructor for the CycleLED Command class.
@@ -44,7 +44,7 @@ public class CycleLED extends Command {
     if (timer.get() - lastRecordedTime >= 2){
       cycleColor(counter);
       counter++;
-      lastRecordedTime = timer.get();
+            lastRecordedTime = timer.get();
     }
   }
 
@@ -59,21 +59,20 @@ public class CycleLED extends Command {
   @Override
   public boolean isFinished() {
     /*  For this style of command, isFinished never returns true.
-        This is because the command is supposed to run until it is
-        interrupted. The scheduler will automatically call end()
-        once that happens. No need to worry about isFinished().
-    */
+     This is because the command is supposed to run until it is
+     interrupted. The scheduler will automatically call end()
+     once that happens. No need to worry about isFinished().
+     */
     return false;
   }
 
-  private void cycleColor(int counter){
-    if (counter%3 == 0){
+  private void cycleColor(int counter) {
+    
+    if (counter % 3 == 0) {
       lightSubsystem.changeAllLEDColor(255, 0, 0); // Change this to whatever color you please.
-    }
-    else if (counter%3 == 1){
+    } else if (counter % 3 == 1) {
       lightSubsystem.changeAllLEDColor(0, 255, 0); // Change this to whatever color you please.
-    } 
-    else {
+    } else {
       lightSubsystem.changeAllLEDColor(0, 0, 255); // Change this to whatever color you please.
     }
   }

@@ -58,14 +58,9 @@ public class Robot extends TimedRobot {
         System.out.println("Robot.disabledInit()");
     }
 
+    /** This function is called periodically while the robot is in Disabled mode. */
     @Override
     public void disabledPeriodic() {
-
-        // Uncommenting the following lines causes loop overruns!
-
-        // if (m_robotContainer.areLightsOn()) {
-        // m_robotContainer.turnLightsOffCommand().schedule();
-        // }
     }
 
     /**
@@ -116,7 +111,7 @@ public class Robot extends TimedRobot {
     /** This function is called periodically during test mode. */
     @Override
     public void testPeriodic() {
-        // System.out.println("Robot.testPeriodic()");
+        System.out.println("Robot.testPeriodic()");
     }
 
     /** This function is called once when the robot is first started up. */
@@ -128,6 +123,6 @@ public class Robot extends TimedRobot {
     /** This function is called periodically whilst in simulation. */
     @Override
     public void simulationPeriodic() {
-        // System.out.println("Robot.simulationPeriodic()");
+         System.out.println("Robot.simulationPeriodic()");
     }
 }
