@@ -47,11 +47,11 @@ public class RainbowLED extends Command {
       for(int i = 0; i<7; i++){
         lightSubsystem.setToColor(i, rainbow[counter%7][0], rainbow[counter%7][1], rainbow[counter%7][2]);
         counter++;
-        lastRecordedTime = timer.get();
       }
+    lastRecordedTime = timer.get();
     counter++;
+    }
   }
-}
 
   // Called once the command ends or is interrupted.
   @Override
