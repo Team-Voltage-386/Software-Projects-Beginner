@@ -18,6 +18,7 @@ public class RainbowLED extends Command {
   private Timer timer = new Timer();
   double lastRecordedTime;
   private int counter = 0;
+  private int hold = 0;
   private LightSubsystem lightSubsystem;
   private int[][] rainbow = {{255, 0, 0},{255, 127, 0},{255, 255, 0},{0, 255, 0},{0, 0, 255},{75, 0, 130},{148, 0, 211}};
   
@@ -44,12 +45,13 @@ public class RainbowLED extends Command {
   @Override
   public void execute() {
     if (timer.get() - lastRecordedTime >= 1){
-      for(int i = 0; i<7; i++){
+      hold++;
+      for(int i = 0; i<76; i++){
         lightSubsystem.setToColor(i, rainbow[counter%7][0], rainbow[counter%7][1], rainbow[counter%7][2]);
         counter++;
       }
+    counter = hold;
     lastRecordedTime = timer.get();
-    counter++;
     }
   }
 
