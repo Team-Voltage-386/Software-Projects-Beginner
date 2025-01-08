@@ -1,4 +1,4 @@
-    // Copyright (c) FIRST and other WPILib contributors.
+// Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
@@ -9,22 +9,25 @@ import frc.robot.subsystems.LightSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.*; // imports everything in the commands folder
+
 
 /**
  * This class is where the bulk of the robot should be declared. Since
- * Command-based is a
- * "declarative" paradigm, very little robot logic should actually be handled in
- * the {@link Robot}
- * periodic methods (other than the scheduler calls). Instead, the structure of
- * the robot (including
+ * Command-based is a "declarative" paradigm, very little robot logic
+ * should actually be handled in the {@link Robot} periodic methods (other than
+ * the scheduler calls). Instead, the structure of the robot (including
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
     // The robot's subsystems and commands are defined here...
     private final LightSubsystem m_lightSubsystem = new LightSubsystem();
+    private final CycleLED cycleLED = new CycleLED(m_lightSubsystem);
+    private final RainbowLED rainbowLED = new RainbowLED(m_lightSubsystem);
 
     // Replace with CommandPS4Controller or CommandJoystick if needed
-    private final CommandXboxController m_driverController = new CommandXboxController(OperatorConstants.kDriverControllerPort);
+    private final CommandXboxController m_driverController = new CommandXboxController(
+            OperatorConstants.kDriverControllerPort);
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -34,36 +37,32 @@ public class RobotContainer {
         configureBindings();
     }
 
-    public void turnOnRed()
-    {
-        //System.out.println("turning on RED!!");
-        //m_lightSubsystem.changeAllLEDColor(255,0,0);
-        //System.out.println("Purple");
-      //  m_lightSubsystem.allPurple();
-        m_lightSubsystem.setToColor(6, 0, 0, 255);
-    }
-
     /**
      * Use this method to define your trigger->command mappings. Triggers can be
-     * created via the
-     * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with
-     * an arbitrary
-     * predicate, or via the named factories in {@link
+     * created via the {@link Trigger#Trigger(java.util.function.BooleanSupplier)}
+     * constructor with an arbitrary predicate, or via the named factories in {@link
      * edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for
-     * {@link
-     * CommandXboxController
-     * Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller
-     * PS4} controllers or
-     * {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
-     * joysticks}.
+     * {@link CommandXboxController Xbox} /
+     * {@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller PS4}
+     * controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick
+     * Flight joysticks}.
      */
     private void configureBindings() {
-        // Schedule `changeAllLEDColor` when the Xbox controller's B button is pressed,
-        // cancelling on release.
-        m_driverController.b().whileTrue(m_lightSubsystem.changeAllLEDColor(255,0,0));
-        // Schedule `changeAllLEDColor` to clear when the Xbox controller's A button is pressed,
-        // cancelling on release.
-        m_driverController.a().whileTrue(m_lightSubsystem.changeAllLEDColor(0, 0, 0));
+
+        // Turn the lights on when button pressed. Turn off when button is released
+       //m_driverController.b().onTrue(m_lightSubsystem.changeAllLEDColor(255, 0, 0));
+        //m_driverController.b().onFalse(m_lightSubsystem.changeAllLEDColor(0, 0, 0));
+
+        // Turn the lights on when button held. Turn off when button is released
+        //m_driverController.y().whileTrue(m_lightSubsystem.changeAllLEDColor(255, 0, 255));
+        //m_driverController.y().onFalse(m_lightSubsystem.changeAllLEDColor(0, 0, 0));
+        
+        // Cycle between 3 LED colors until interrupted
+        m_driverController.a().toggleOnTrue(cycleLED);
+
+        // Note: the setAllBlue command doesn't run when disabled.
+        m_driverController.x().toggleOnTrue(rainbowLED);
+
     }
 
     /**
@@ -76,11 +75,7 @@ public class RobotContainer {
         // return Autos.exampleAuto(m_exampleSubsystem);
         return null;
     }
-
-    public Command turnLightsOffCommand() {
-        return m_lightSubsystem.changeAllLEDColor(0, 0, 0);
-    }
-
+    
     public boolean areLightsOn() {
         return m_lightSubsystem.areLightsOn();
     }

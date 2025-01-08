@@ -7,35 +7,29 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.util.Color;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.commands.ChangeLEDColorCommand;
+//import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 
 public class LightSubsystem extends SubsystemBase {
-    // This should be 1 for the briefcase bot. (EDIT: appears plugged into PWM port 0 for briefcase)
-    // This should be 9 for the Demoboard.
-    private static final int kLedPort = 9;
+    // IMPORTANT! 
+    // Modify the port number based on which PWM the LEDs are plugged into
+    private static final int kLedPort = 7;
 
     /**
-     * Length of the LED strip
-     * This should be 10 for the briefcase bot
+     * Length of the LED strip.
+     * This should be 10 for the briefcase bot.
      * This should be 76 for the Demoboard.
      */
-    private static final int kLedLength = 76;
+    private static final int kLedLength = 10;
 
-    // PWM port 9
-    // Must be a PWM header, not MXP or DIO
     AddressableLED led = new AddressableLED(kLedPort);
 
-    // Reuse buffer
-    // Default to a length of 10, start empty output
-    // Length is expensive to set, so only set it once, then just update data
     AddressableLEDBuffer ledBuffer = new AddressableLEDBuffer(kLedLength);
 
-    /** Creates a new ExampleSubsystem. */
+    /** Creates a new LightSubsystem. */
     public LightSubsystem() {
-        // Set the data
+        // Start the LEDs
+        // Length is expensive to set, so only set it once, then just update data
         led.setLength(kLedLength);
         led.setData(ledBuffer);
         led.start();
@@ -44,6 +38,12 @@ public class LightSubsystem extends SubsystemBase {
     public void setToColor(int index, int r, int g, int b) {
         ledBuffer.setRGB(index, r, g, b);
         return;
+    }
+
+    public void changeAllLEDColor(int r, int g, int b) {
+        for (int i = 0; i < ledBuffer.getLength(); i++) {
+            setToColor(i, r, g, b);
+        }
     }
 
     public boolean areLightsOn() {
@@ -57,40 +57,6 @@ public class LightSubsystem extends SubsystemBase {
             lightsAreOn |= c.red > 0.1;
         }
         return lightsAreOn;
-    }
-
-    public Command changeLEDColor(int index, int r, int g, int b) {
-        // Inline construction of command goes here.
-        // Subsystem::RunOnce implicitly requires `this` subsystem.
-        return runOnce(() -> new ChangeLEDColorCommand(this, index, r, g, b).ignoringDisable(true));
-    }
-
-    public Command changeAllLEDColor(int r, int g, int b) {
-        ParallelCommandGroup parallelCommandGroup = new ParallelCommandGroup();
-        for (int i = 0; i < ledBuffer.getLength(); i++)
-        {
-            //ledBuffer.setRGB(i, 255 ,0, 0);
-           parallelCommandGroup.addCommands(new ChangeLEDColorCommand(this, i, r, g, b).ignoringDisable(true));
-        }
-        return parallelCommandGroup;
-    }
-
-    public Command setAllBlue(){
-        return runOnce(
-        () -> {
-            for (int i = 0; i < ledBuffer.getLength(); i++)
-            {
-                ledBuffer.setRGB(i,0,0,255);
-            }
-        }
-        );
-    }
-
-    public void allPurple() {
-        for (int i=0; i < ledBuffer.getLength(); i++)
-        {
-            ledBuffer.setRGB(i,100,0,200);
-        }
     }
 
     /**
@@ -107,8 +73,7 @@ public class LightSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
-        // Set the LEDs
-       // allOff();
+        // Send the current values to the LED strip
         led.setData(ledBuffer);
     }
 
