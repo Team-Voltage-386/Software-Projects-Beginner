@@ -1,8 +1,11 @@
 package frc.robot.subsystems;
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkBase.IdleMode;
-import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.config.SparkBaseConfig.*;
+import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ArmFeedforward;
@@ -27,7 +30,7 @@ public class ArmSubsystem extends SubsystemBase {
   private GenericEntry m_feedForwardActualOutputGenericEntry;
   private GenericEntry m_feedForwardInputPositionGenericEntry;
   private GenericEntry m_feedForwardInputVelocityGenericEntry;
-  private CANSparkMax m_motor;
+  private SparkMax m_motor;
   private ArmFeedforward m_armFeedforward;
   private Command m_setVoltageToFeedForwardCommand;
   private static final double EPSILON = 0.001;
@@ -71,21 +74,30 @@ public class ArmSubsystem extends SubsystemBase {
         .withSize(1, 1).getEntry();
 
     // There is one motor
-    this.m_motor = new CANSparkMax(Constants.Motor.kCANID, MotorType.kBrushless);
+    this.m_motor = new SparkMax(Constants.Motor.kCANID, MotorType.kBrushless);
     // coast mode means we have to fight gravity (the motor won't help hold the
     // position)
-    this.m_motor.setIdleMode(IdleMode.kCoast);
+    
     // The encoder is a relative encoder (not absolute)
 
     // The gear ratio is 12.75. One entire rotation of the arm is 12.75 rotations of
     // the motor shaft. Multiplying by 2Pi and 1/12.75 transforms the
     // motor position reading (in rotations) to the position of the arm in the range
     // 0 to 2Pi
-    this.m_motor.getEncoder().setPositionConversionFactor(Math.PI * 2 * 1 /
-        12.75);
+    
     // multiplying by 1/60 gives us radians/second
-    this.m_motor.getEncoder().setVelocityConversionFactor(Math.PI * 2 * 1.0 /
-        12.75 * 1.0 / 60.0);
+    
+    SparkMaxConfig config = new SparkMaxConfig();
+    config
+        .idleMode(IdleMode.kCoast);
+    config.encoder
+        .positionConversionFactor(Math.PI * 2 * 1 /
+            12.75)
+        .velocityConversionFactor(Math.PI * 2 * 1.0 /
+            12.75 * 1.0 / 60.0);
+
+    this.m_motor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+
     // Assumes that postion 0 is with the arm straight out parallel to the floor
     // Arm FF depends on this.
     // Therefore the position of the arm when hanging straight down is 270 degrees.
