@@ -1,7 +1,9 @@
 package frc.robot.subsystems;
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkLowLevel.MotorType;
+// import com.revrobotics.CANSparkMax;
+// import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.networktables.GenericEntry;
@@ -22,7 +24,7 @@ public class MotorSubsystem extends SubsystemBase {
   private GenericEntry m_decrementVoltageGenericEntry;
   private GenericEntry m_doRunMotorsGenericEntry;
   private GenericEntry m_areMotorsRunningGenericEntry;
-  private CANSparkMax m_motor;
+  private SparkMax m_motor;
   private boolean m_askedToRunMotors;
   private Command m_motorRunCommand;
   private static final double EPSILON = 0.001;
@@ -47,7 +49,7 @@ public class MotorSubsystem extends SubsystemBase {
         .withPosition(0, 3).withSize(2, 1).withWidget(BuiltInWidgets.kBooleanBox).getEntry();
 
     // Set up motor state
-    this.m_motor = new CANSparkMax(Constants.Motor.kCANID, MotorType.kBrushless);
+    this.m_motor = new SparkMax(Constants.Motor.kCANID, MotorType.kBrushless);
     this.m_askedToRunMotors = false;
     this.m_motorRunCommand = new MotorRunCommand(this);
 
