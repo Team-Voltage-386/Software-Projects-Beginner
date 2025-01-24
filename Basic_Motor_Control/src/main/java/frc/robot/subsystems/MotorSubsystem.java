@@ -19,6 +19,7 @@ import frc.robot.commands.MotorRunCommand;
 public class MotorSubsystem extends SubsystemBase {
   private GenericEntry m_voltageGenericEntry;
   private GenericEntry m_voltageOutputGenericEntry;
+  private GenericEntry m_currentOutputGenericEntry;
   private GenericEntry m_incDecAmountGenericEntry;
   private GenericEntry m_incrementVoltageGenericEntry;
   private GenericEntry m_decrementVoltageGenericEntry;
@@ -35,6 +36,8 @@ public class MotorSubsystem extends SubsystemBase {
         .withSize(2, 1)
         .getEntry();
     this.m_voltageOutputGenericEntry = Shuffleboard.getTab(getName()).add("Output Voltage", 0.0).withPosition(0, 0)
+        .withSize(2, 1).getEntry();
+    this.m_currentOutputGenericEntry = Shuffleboard.getTab(getName()).add("Motor Current", 0.0).withPosition(3, 0)
         .withSize(2, 1).getEntry();
     this.m_incDecAmountGenericEntry = Shuffleboard.getTab(getName()).add("Inc_Dec Amount", 0.1).withPosition(6, 1)
         .withSize(1, 1).getEntry();
@@ -137,6 +140,10 @@ public class MotorSubsystem extends SubsystemBase {
     return this.m_motor.getAppliedOutput();
 
   }
+  public double getMotorCurrent() {
+    return this.m_motor.getOutputCurrent();
+
+  }
 
   /**
    * Sets the voltage of the motor
@@ -182,5 +189,6 @@ public class MotorSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     m_voltageOutputGenericEntry.setDouble(this.getMotorVoltage());
+    m_currentOutputGenericEntry.getDouble(this.getMotorCurrent());
   }
 }
