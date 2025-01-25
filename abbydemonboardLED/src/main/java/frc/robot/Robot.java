@@ -5,9 +5,11 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Joystick;
 
 public class Robot extends TimedRobot {
   private final RobotContainer m_container = new RobotContainer();
+  private final Joystick m_stick = new Joystick(Constants.Joystick.kPort);
 
   /** Called once at the beginning of the robot program. */
   public Robot() {
@@ -17,7 +19,13 @@ public class Robot extends TimedRobot {
   @Override
   // public void robotPeriodic() {
   public void teleopPeriodic() {
-    m_container.getLedSubsystem().updateLEDs();
+
+    if (m_stick.getRawButton(Constants.Joystick.kButtonLED)) {
+      m_container.getLedSubsystem().updateLEDs();
+    } else if (!m_stick.getRawButton(Constants.Joystick.kButtonLED)) {
+      m_container.getLedSubsystem().clearLEDs();
+    }
+
   }
 
   @Override

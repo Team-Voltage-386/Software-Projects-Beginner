@@ -38,6 +38,7 @@ public class LEDSubsystem extends SubsystemBase {
         m_scrollingRainbow.applyTo(m_ledBuffer);
         // Set the LEDs
         m_led.setData(m_ledBuffer);
+
     }
 
     public void clearLEDs() {
