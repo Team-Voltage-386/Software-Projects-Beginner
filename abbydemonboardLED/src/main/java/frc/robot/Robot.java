@@ -14,7 +14,7 @@ public class Robot extends TimedRobot {
 
   /** Called once at the beginning of the robot program. */
   public Robot() {
-
+    m_container.getUltrasonicSubsystem().enablePing();
   }
 
   @Override
@@ -30,6 +30,8 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Joystick Left Y", m_controller.getLeftY());
     SmartDashboard.putNumber("Joystick Right X", m_controller.getRightX());
     SmartDashboard.putNumber("Joystick Right Y", m_controller.getRightY());
+
+    m_container.getUltrasonicSubsystem().updateDistance();
   }
 
   @Override

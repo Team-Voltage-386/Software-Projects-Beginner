@@ -10,4 +10,9 @@ public class Constants {
         public static final int kPort = 0;
         public static final int kButtonLED = 3;
     }
+
+    public class Ultrasonic {
+        public static final int kPingChannel = 9;
+        public static final int kEchoChannel = 8;
+    }
 }
