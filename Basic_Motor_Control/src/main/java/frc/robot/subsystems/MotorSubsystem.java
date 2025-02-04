@@ -27,13 +27,14 @@ import frc.robot.commands.MotorRunCommand;
 
 public class MotorSubsystem extends SubsystemBase {
   private final NetworkTable table;
-  private DoubleEntry m_reqestedVoltage;
+  private DoubleEntry m_requestedVoltage;
   private DoublePublisher m_voltageOutputGenericEntry;
   private DoublePublisher m_currentOutputGenericEntry;
   private DoubleEntry m_incDecAmountGenericEntry;
   private BooleanEntry m_incrementVoltageGenericEntry;
   private BooleanEntry m_decrementVoltageGenericEntry;
   private BooleanEntry m_doRunMotorsGenericEntry;
+  private BooleanPublisher m_doRunMotorsOutputGenericEntry;
   private BooleanPublisher m_areMotorsRunningGenericEntry;
   private SparkMax m_motor;
   private boolean m_askedToRunMotors;
@@ -71,7 +72,7 @@ public class MotorSubsystem extends SubsystemBase {
   
     m_voltageOutputGenericEntry = table.getDoubleTopic("Output Voltage").publish();
     m_currentOutputGenericEntry = table.getDoubleTopic("Motor Current").publish();
-    //m_reqestedVoltage = table.getDoubleTopic("Input Voltage").publish();
+    m_requestedVoltage = table.getDoubleTopic("Input Voltage").getEntry(0.0);
 
     m_incrementVoltageGenericEntry = table.getBooleanTopic("INC").getEntry(false);
     m_incrementVoltageGenericEntry.set(false);// needed to make the entry show up in elastic
@@ -79,6 +80,7 @@ public class MotorSubsystem extends SubsystemBase {
     m_decrementVoltageGenericEntry.set(false);// needed to make the entry show up in elastic
     m_doRunMotorsGenericEntry = table.getBooleanTopic("Run Motors?").getEntry(false);
     m_doRunMotorsGenericEntry.set(false);// needed to make the entry show up in elastic
+    m_doRunMotorsOutputGenericEntry = table.getBooleanTopic("RunMotors Print").publish();
 
     // when the robot is not disabled and you've clicked the button on shuffleboard
     // to run the motors, the motor voltage is set based on the value on
@@ -137,7 +139,7 @@ public class MotorSubsystem extends SubsystemBase {
    *         zero
    */
   public double getVoltage() {
-    double res = this.m_reqestedVoltage.get(0);
+    double res = this.m_requestedVoltage.get(0);
     if (Math.abs(res) < EPSILON) {
       return 0.0;
     } else {
@@ -151,7 +153,9 @@ public class MotorSubsystem extends SubsystemBase {
    * @return the state of the button
    */
   public boolean doRunMotor() {
-    return this.m_doRunMotorsGenericEntry.get(false);
+    boolean runMotorInput = this.m_doRunMotorsGenericEntry.get(false);
+    m_doRunMotorsOutputGenericEntry.set(runMotorInput);
+    return runMotorInput;
   }
 
   /**
@@ -192,11 +196,11 @@ public class MotorSubsystem extends SubsystemBase {
   }
 
   public void incrementVoltageGenericEntry() {
-    this.m_reqestedVoltage.set(this.getVoltage() + this.getAndUpdateIncDecAmount());
+    this.m_requestedVoltage.set(this.getVoltage() + this.getAndUpdateIncDecAmount());
   }
 
   public void decrementVoltageGenericEntry() {
-    this.m_reqestedVoltage.set(this.getVoltage() - this.getAndUpdateIncDecAmount());
+    this.m_requestedVoltage.set(this.getVoltage() - this.getAndUpdateIncDecAmount());
   }
 
   public void startMotor() {
