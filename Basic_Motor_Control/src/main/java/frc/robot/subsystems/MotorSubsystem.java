@@ -50,7 +50,7 @@ public class MotorSubsystem extends SubsystemBase {
     //     .withSize(2, 1).getEntry();
     // this.m_currentOutputGenericEntry = Shuffleboard.getTab(getName()).add("Motor Current", 0.0).withPosition(3, 0)
     //     .withSize(2, 1).getEntry();
-    // this.m_incDecAmountGenericEntry = Shuffleboard.getTab(getName()).add("Inc_Dec Amount", 0.1).withPosition(6, 1)
+    //this.m_incDecAmountGenericEntry = Shuffleboard.getTab(getName()).add("Inc_Dec Amount", 0.1).withPosition(6, 1)
     //     .withSize(1, 1).getEntry();
     // this.m_incrementVoltageGenericEntry = Shuffleboard.getTab(getName()).add("Inc", false).withPosition(4, 1)
     //     .withSize(1, 1).withWidget(BuiltInWidgets.kToggleButton).getEntry();
@@ -73,6 +73,9 @@ public class MotorSubsystem extends SubsystemBase {
     m_voltageOutputGenericEntry = table.getDoubleTopic("Output Voltage").publish();
     m_currentOutputGenericEntry = table.getDoubleTopic("Motor Current").publish();
     m_requestedVoltage = table.getDoubleTopic("Input Voltage").getEntry(0.0);
+    m_requestedVoltage.set(0.0);
+    m_incDecAmountGenericEntry = table.getDoubleTopic("Inc_Dec Amount").getEntry(0.0);
+    m_incDecAmountGenericEntry.set(0.0);
 
     m_incrementVoltageGenericEntry = table.getBooleanTopic("INC").getEntry(false);
     m_incrementVoltageGenericEntry.set(false);// needed to make the entry show up in elastic
