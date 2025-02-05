@@ -27,15 +27,11 @@
             "y": 128.0,
             "width": 128.0,
             "height": 128.0,
-            "type": "Boolean Box",
+            "type": "Toggle Button",
             "properties": {
               "topic": "/MotorSubsystem/DEC",
               "period": 0.06,
-              "data_type": "boolean",
-              "true_color": 4283215696,
-              "false_color": 4294198070,
-              "true_icon": "None",
-              "false_icon": "None"
+              "data_type": "boolean"
             }
           },
           {
@@ -44,15 +40,11 @@
             "y": 128.0,
             "width": 128.0,
             "height": 128.0,
-            "type": "Boolean Box",
+            "type": "Toggle Button",
             "properties": {
               "topic": "/MotorSubsystem/INC",
               "period": 0.06,
-              "data_type": "boolean",
-              "true_color": 4283215696,
-              "false_color": 4294198070,
-              "true_icon": "None",
-              "false_icon": "None"
+              "data_type": "boolean"
             }
           },
           {
@@ -75,15 +67,11 @@
             "y": 128.0,
             "width": 128.0,
             "height": 128.0,
-            "type": "Boolean Box",
+            "type": "Toggle Switch",
             "properties": {
               "topic": "/MotorSubsystem/Run Motors?",
               "period": 0.06,
-              "data_type": "boolean",
-              "true_color": 4283215696,
-              "false_color": 4294198070,
-              "true_icon": "None",
-              "false_icon": "None"
+              "data_type": "boolean"
             }
           },
           {
