@@ -106,12 +106,12 @@ public class MotorSubsystem extends SubsystemBase {
         }).onTrue(
             Commands.runOnce(
                 () -> {
-                  this.m_areMotorsRunningGenericEntry.set(false);
+                  this.m_doRunMotorsOutputGenericEntry.set(false);
                 }).ignoringDisable(true))
         .onFalse(
             Commands.runOnce(
                 () -> {
-                  this.m_areMotorsRunningGenericEntry.set(true);
+                  this.m_doRunMotorsOutputGenericEntry.set(true);
                 }).ignoringDisable(true));
 
     // When the increment voltage button is pressed, the voltage is incremented
