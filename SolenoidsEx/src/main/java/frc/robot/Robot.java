@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.DataLogManager;
 
 /**
  * This is a sample program showing the use of the solenoid classes during operator control. Three
@@ -60,7 +61,10 @@ public class Robot extends TimedRobot {
     // The switch is open when the pressure is over ~120 PSI.
     tab.addBoolean("Pressure Switch", m_compressor::getPressureSwitchValue);
   }
-
+  @Override
+    public void robotInit(){
+      DataLogManager.start();
+    }
   @SuppressWarnings("PMD.UnconditionalIfStatement")
   @Override
   public void teleopPeriodic() {
