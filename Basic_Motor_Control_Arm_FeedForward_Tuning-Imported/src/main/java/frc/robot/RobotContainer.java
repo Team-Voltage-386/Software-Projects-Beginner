@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.networktables.NetworkTableInstance;
 import frc.robot.subsystems.ArmSubsystem;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -17,8 +18,9 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  * and trigger mappings) should be declared here.
  */
 public class RobotContainer {
+  private final NetworkTableInstance nt = NetworkTableInstance.getDefault();
   // The robot's subsystems and commands are defined here...
-  private final ArmSubsystem m_armSubsystem = new ArmSubsystem();
+  private final ArmSubsystem m_armSubsystem = new ArmSubsystem(nt);
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   // private final CommandXboxController m_driverController = new
