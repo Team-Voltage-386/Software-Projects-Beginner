@@ -67,7 +67,7 @@
             "y": 128.0,
             "width": 128.0,
             "height": 128.0,
-            "type": "Toggle Switch",
+            "type": "Toggle Button",
             "properties": {
               "topic": "/MotorSubsystem/Run Motors?",
               "period": 0.06,
@@ -89,6 +89,34 @@
             }
           },
           {
+            "title": "Inc_Dec Amount",
+            "x": 512.0,
+            "y": 128.0,
+            "width": 128.0,
+            "height": 128.0,
+            "type": "Text Display",
+            "properties": {
+              "topic": "/MotorSubsystem/Inc_Dec Amount",
+              "period": 0.06,
+              "data_type": "double",
+              "show_submit_button": true
+            }
+          },
+          {
+            "title": "Input Voltage",
+            "x": 512.0,
+            "y": 0.0,
+            "width": 256.0,
+            "height": 128.0,
+            "type": "Text Display",
+            "properties": {
+              "topic": "/MotorSubsystem/Input Voltage",
+              "period": 0.06,
+              "data_type": "double",
+              "show_submit_button": true
+            }
+          },
+          {
             "title": "RunMotors Print",
             "x": 0.0,
             "y": 256.0,
@@ -103,34 +131,6 @@
               "false_color": 4294198070,
               "true_icon": "None",
               "false_icon": "None"
-            }
-          },
-          {
-            "title": "Inc_Dec Amount",
-            "x": 512.0,
-            "y": 128.0,
-            "width": 128.0,
-            "height": 128.0,
-            "type": "Text Display",
-            "properties": {
-              "topic": "/MotorSubsystem/Inc_Dec Amount",
-              "period": 0.06,
-              "data_type": "double",
-              "show_submit_button": false
-            }
-          },
-          {
-            "title": "Input Voltage",
-            "x": 512.0,
-            "y": 0.0,
-            "width": 128.0,
-            "height": 128.0,
-            "type": "Text Display",
-            "properties": {
-              "topic": "/MotorSubsystem/Input Voltage",
-              "period": 0.06,
-              "data_type": "double",
-              "show_submit_button": false
             }
           }
         ]

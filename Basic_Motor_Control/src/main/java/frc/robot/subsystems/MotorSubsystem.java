@@ -14,6 +14,8 @@ import edu.wpi.first.networktables.DoubleSubscriber;
 import edu.wpi.first.networktables.DoubleEntry;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.PubSubOption;
+import edu.wpi.first.networktables.PubSubOptions;
 import edu.wpi.first.networktables.StringPublisher;
 // import edu.wpi.first.networktables.GenericEntry;
 // import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
@@ -72,9 +74,9 @@ public class MotorSubsystem extends SubsystemBase {
   
     m_voltageOutputGenericEntry = table.getDoubleTopic("Output Voltage").publish();
     m_currentOutputGenericEntry = table.getDoubleTopic("Motor Current").publish();
-    m_requestedVoltage = table.getDoubleTopic("Input Voltage").getEntry(0.0);
+    m_requestedVoltage = table.getDoubleTopic("Input Voltage").getEntry(0.0, PubSubOption.sendAll(true));
     m_requestedVoltage.set(0.0);
-    m_incDecAmountGenericEntry = table.getDoubleTopic("Inc_Dec Amount").getEntry(0.0);
+    m_incDecAmountGenericEntry = table.getDoubleTopic("Inc_Dec Amount").getEntry(0.0, PubSubOption.sendAll(true));
     m_incDecAmountGenericEntry.set(0.0);
 
     m_incrementVoltageGenericEntry = table.getBooleanTopic("INC").getEntry(false);
@@ -106,12 +108,12 @@ public class MotorSubsystem extends SubsystemBase {
         }).onTrue(
             Commands.runOnce(
                 () -> {
-                  this.m_areMotorsRunningGenericEntry.set(false);
+                  this.m_doRunMotorsOutputGenericEntry.set(false);
                 }).ignoringDisable(true))
         .onFalse(
             Commands.runOnce(
                 () -> {
-                  this.m_areMotorsRunningGenericEntry.set(true);
+                  this.m_doRunMotorsOutputGenericEntry.set(true);
                 }).ignoringDisable(true));
 
     // When the increment voltage button is pressed, the voltage is incremented
