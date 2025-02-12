@@ -7,22 +7,20 @@ import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
-import edu.wpi.first.networktables.IntegerPublisher;
-import edu.wpi.first.networktables.BooleanEntry;
 import edu.wpi.first.networktables.BooleanPublisher;
 import edu.wpi.first.networktables.DoublePublisher;
-import edu.wpi.first.networktables.DoubleSubscriber;
 import edu.wpi.first.networktables.DoubleEntry;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.PubSubOption;
-import edu.wpi.first.networktables.PubSubOptions;
-import edu.wpi.first.networktables.StringPublisher;
+//import edu.wpi.first.networktables.PubSubOptions;
+//import edu.wpi.first.networktables.StringPublisher;
+//import edu.wpi.first.networktables.DoubleSubscriber;
+//import edu.wpi.first.networktables.IntegerPublisher;
+//import edu.wpi.first.networktables.BooleanEntry;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ArmFeedforward;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -30,6 +28,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
 
 public class ArmSubsystem extends SubsystemBase {
+
   private final NetworkTable table;
   private DoublePublisher m_voltageOutputGenericEntry;
   private DoublePublisher m_relativePositionOutputGenericEntry;
@@ -53,54 +52,30 @@ public class ArmSubsystem extends SubsystemBase {
     // Dashboard objects
     // Informational objects
     m_voltageOutputGenericEntry = table.getDoubleTopic("Output Voltage").publish();
-    // this.m_voltageOutputGenericEntry = Shuffleboard.getTab(getName()).add("Output Voltage", 0.0).withPosition(0, 0)
-    //     .withSize(2, 1).getEntry();
-    m_relativePositionOutputGenericEntry = table.getDoubleTopic("Output Rel Enc Position").publish();
-    // this.m_relativePositionOutputGenericEntry = Shuffleboard.getTab(getName()).add("Output Rel Enc Position", 0.0)
-    //     .withPosition(0, 1).withSize(2, 1).getEntry();
+     m_relativePositionOutputGenericEntry = table.getDoubleTopic("Output Rel Enc Position").publish();
     m_relativePositionRawGenericEntry = table.getDoubleTopic("Raw Rel Enc Position").publish();
-    // this.m_relativePositionRawGenericEntry = Shuffleboard.getTab(getName()).add("Raw Rel Enc Position", 0.0)
-    //     .withPosition(0, 2).withSize(2, 1).getEntry();
     m_areMotorsRunningGenericEntry = table.getBooleanTopic("Are motors running?").publish();
-    // this.m_areMotorsRunningGenericEntry = Shuffleboard.getTab(getName()).add("Are motors running?", false)
-    //     .withPosition(0, 3).withSize(2, 1).withWidget(BuiltInWidgets.kBooleanBox).getEntry();
 
     // Objects to be changed by the user
     m_feedForwardKSGenericEntry = table.getDoubleTopic("FF KS").getEntry(0.0, PubSubOption.sendAll(true));
     m_feedForwardKSGenericEntry.set(0.0);
-    // this.m_feedForwardKSGenericEntry = Shuffleboard.getTab(getName()).add("FF KS", 0.0).withPosition(4, 0)
-    //     .withSize(1, 1).getEntry();
     m_feedForwardKGGenericEntry = table.getDoubleTopic("FF KG").getEntry(0.0, PubSubOption.sendAll(true));
     m_feedForwardKGGenericEntry.set(0.0);
-    // this.m_feedForwardKGGenericEntry = Shuffleboard.getTab(getName()).add("FF KG", 0.0).withPosition(5, 0)
-    //     .withSize(1, 1).getEntry();
     m_feedForwardKVGenericEntry = table.getDoubleTopic("FF KV").getEntry(0.0, PubSubOption.sendAll(true));
     m_feedForwardKVGenericEntry.set(0.0);
-    // this.m_feedForwardKVGenericEntry = Shuffleboard.getTab(getName()).add("FF KV", 0.0).withPosition(6, 0)
-    //     .withSize(1, 1).getEntry();
 
     // Actual output
     m_feedForwardActualOutputGenericEntry = table.getDoubleTopic("FF Actual Output").publish();
-    // this.m_feedForwardActualOutputGenericEntry = Shuffleboard.getTab(getName()).add("FF Actual Output", 0.0)
-    //     .withPosition(6, 2)
-    //     .withSize(1, 1).getEntry();
 
     // User provides position and speed and the FF controller will calculate the FF
     // Output that it would supply
     m_feedForwardInputPositionGenericEntry = table.getDoubleTopic("FF Input Pos Rad").getEntry(0.0, PubSubOption.sendAll(true));
     m_feedForwardInputPositionGenericEntry.set(0.0);
-    // this.m_feedForwardInputPositionGenericEntry = Shuffleboard.getTab(getName()).add("FF Input Pos Rad", 0.0)
-    //     .withPosition(4, 1).withSize(1, 1)
-    //     .getEntry();
     m_feedForwardInputVelocityGenericEntry = table.getDoubleTopic("FF Input Vel Rad_s").getEntry(0.0, PubSubOption.sendAll(true));
     m_feedForwardInputVelocityGenericEntry.set(0.0);
-    // this.m_feedForwardInputVelocityGenericEntry = Shuffleboard.getTab(getName()).add("FF Input Vel Rad_s", 0.0)
-    //     .withPosition(5, 1).withSize(1, 1)
-    //     .getEntry();
     m_feedForwardOutputGenericEntry = table.getDoubleTopic("FF Output").getEntry(0.0, PubSubOption.sendAll(true));
     m_feedForwardOutputGenericEntry.set(0.0);
-    // this.m_feedForwardOutputGenericEntry = Shuffleboard.getTab(getName()).add("FF Output", 0.0).withPosition(6, 1)
-    //     .withSize(1, 1).getEntry();
+
 
     // There is one motor
     this.m_motor = new SparkMax(Constants.Motor.kCANID, MotorType.kBrushless);
@@ -152,7 +127,7 @@ public class ArmSubsystem extends SubsystemBase {
       this.m_motor.setVoltage(ffOut);
     });
 
-    // if the motor voltage is very small then shuffleboad boolean box turns red
+    // if the motor voltage is very small then dashboard boolean box turns red
     // (motors are off) otherwise it turns green (motors are on)
 
     new Trigger(
@@ -205,7 +180,7 @@ public class ArmSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // Update shuffleboard
+    // Update dashboard
     this.m_voltageOutputGenericEntry.set(this.getMotorVoltage());
     this.m_relativePositionOutputGenericEntry.set(this.getArmPosition());
     this.m_relativePositionRawGenericEntry.set(this.m_motor.getEncoder().getPosition());
