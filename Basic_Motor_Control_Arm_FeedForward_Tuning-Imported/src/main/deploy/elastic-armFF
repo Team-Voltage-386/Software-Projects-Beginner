@@ -1,0 +1,305 @@
+{
+  "version": 1.0,
+  "grid_size": 100,
+  "tabs": [
+    {
+      "name": "Teleoperated",
+      "grid_layout": {
+        "layouts": [],
+        "containers": []
+      }
+    },
+    {
+      "name": "Autonomous",
+      "grid_layout": {
+        "layouts": [],
+        "containers": []
+      }
+    },
+    {
+      "name": "ArmSubsystem",
+      "grid_layout": {
+        "layouts": [],
+        "containers": [
+          {
+            "title": "Are motors running?",
+            "x": 0.0,
+            "y": 200.0,
+            "width": 200.0,
+            "height": 100.0,
+            "type": "Boolean Box",
+            "properties": {
+              "topic": "/ArmSubsystem/Are motors running?",
+              "period": 0.06,
+              "data_type": "boolean",
+              "true_color": 4283215696,
+              "false_color": 4294198070,
+              "true_icon": "None",
+              "false_icon": "None"
+            }
+          },
+          {
+            "title": "FF Input Pos Rad",
+            "x": 400.0,
+            "y": 200.0,
+            "width": 200.0,
+            "height": 100.0,
+            "type": "Text Display",
+            "properties": {
+              "topic": "/ArmSubsystem/FF Input Pos Rad",
+              "period": 0.06,
+              "data_type": "double",
+              "show_submit_button": true
+            }
+          },
+          {
+            "title": "FF Input Vel Rad_s",
+            "x": 600.0,
+            "y": 200.0,
+            "width": 200.0,
+            "height": 100.0,
+            "type": "Text Display",
+            "properties": {
+              "topic": "/ArmSubsystem/FF Input Vel Rad_s",
+              "period": 0.06,
+              "data_type": "double",
+              "show_submit_button": true
+            }
+          },
+          {
+            "title": "FF Actual Output",
+            "x": 600.0,
+            "y": 100.0,
+            "width": 200.0,
+            "height": 100.0,
+            "type": "Text Display",
+            "properties": {
+              "topic": "/ArmSubsystem/FF Actual Output",
+              "period": 0.06,
+              "data_type": "double",
+              "show_submit_button": false
+            }
+          },
+          {
+            "title": "FF KG",
+            "x": 400.0,
+            "y": 0.0,
+            "width": 100.0,
+            "height": 100.0,
+            "type": "Text Display",
+            "properties": {
+              "topic": "/ArmSubsystem/FF KG",
+              "period": 0.06,
+              "data_type": "double",
+              "show_submit_button": true
+            }
+          },
+          {
+            "title": "FF KS",
+            "x": 500.0,
+            "y": 0.0,
+            "width": 100.0,
+            "height": 100.0,
+            "type": "Text Display",
+            "properties": {
+              "topic": "/ArmSubsystem/FF KS",
+              "period": 0.06,
+              "data_type": "double",
+              "show_submit_button": true
+            }
+          },
+          {
+            "title": "FF KV",
+            "x": 600.0,
+            "y": 0.0,
+            "width": 100.0,
+            "height": 100.0,
+            "type": "Text Display",
+            "properties": {
+              "topic": "/ArmSubsystem/FF KV",
+              "period": 0.06,
+              "data_type": "double",
+              "show_submit_button": true
+            }
+          },
+          {
+            "title": "FF Output",
+            "x": 400.0,
+            "y": 100.0,
+            "width": 200.0,
+            "height": 100.0,
+            "type": "Text Display",
+            "properties": {
+              "topic": "/ArmSubsystem/FF Output",
+              "period": 0.06,
+              "data_type": "double",
+              "show_submit_button": false
+            }
+          },
+          {
+            "title": "Output Rel Enc Position",
+            "x": 0.0,
+            "y": 0.0,
+            "width": 200.0,
+            "height": 100.0,
+            "type": "Text Display",
+            "properties": {
+              "topic": "/ArmSubsystem/Output Rel Enc Position",
+              "period": 0.06,
+              "data_type": "double",
+              "show_submit_button": false
+            }
+          },
+          {
+            "title": "Output Voltage",
+            "x": 200.0,
+            "y": 0.0,
+            "width": 200.0,
+            "height": 100.0,
+            "type": "Text Display",
+            "properties": {
+              "topic": "/ArmSubsystem/Output Voltage",
+              "period": 0.06,
+              "data_type": "double",
+              "show_submit_button": false
+            }
+          },
+          {
+            "title": "Raw Rel Enc Position",
+            "x": 0.0,
+            "y": 100.0,
+            "width": 200.0,
+            "height": 100.0,
+            "type": "Text Display",
+            "properties": {
+              "topic": "/ArmSubsystem/Raw Rel Enc Position",
+              "period": 0.06,
+              "data_type": "double",
+              "show_submit_button": false
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "MotorSubsystem",
+      "grid_layout": {
+        "layouts": [],
+        "containers": [
+          {
+            "title": "DEC",
+            "x": 400.0,
+            "y": 100.0,
+            "width": 128.0,
+            "height": 128.0,
+            "type": "Toggle Button",
+            "properties": {
+              "topic": "/MotorSubsystem/DEC",
+              "period": 0.06,
+              "data_type": "boolean"
+            }
+          },
+          {
+            "title": "INC",
+            "x": 300.0,
+            "y": 100.0,
+            "width": 128.0,
+            "height": 128.0,
+            "type": "Toggle Button",
+            "properties": {
+              "topic": "/MotorSubsystem/INC",
+              "period": 0.06,
+              "data_type": "boolean"
+            }
+          },
+          {
+            "title": "Motor Current",
+            "x": 0.0,
+            "y": 0.0,
+            "width": 300.0,
+            "height": 128.0,
+            "type": "Text Display",
+            "properties": {
+              "topic": "/MotorSubsystem/Motor Current",
+              "period": 0.06,
+              "data_type": "double",
+              "show_submit_button": false
+            }
+          },
+          {
+            "title": "Run Motors?",
+            "x": 0.0,
+            "y": 100.0,
+            "width": 128.0,
+            "height": 128.0,
+            "type": "Toggle Button",
+            "properties": {
+              "topic": "/MotorSubsystem/Run Motors?",
+              "period": 0.06,
+              "data_type": "boolean"
+            }
+          },
+          {
+            "title": "Output Voltage",
+            "x": 300.0,
+            "y": 0.0,
+            "width": 300.0,
+            "height": 128.0,
+            "type": "Text Display",
+            "properties": {
+              "topic": "/MotorSubsystem/Output Voltage",
+              "period": 0.06,
+              "data_type": "double",
+              "show_submit_button": false
+            }
+          },
+          {
+            "title": "Inc_Dec Amount",
+            "x": 500.0,
+            "y": 100.0,
+            "width": 128.0,
+            "height": 128.0,
+            "type": "Text Display",
+            "properties": {
+              "topic": "/MotorSubsystem/Inc_Dec Amount",
+              "period": 0.06,
+              "data_type": "double",
+              "show_submit_button": true
+            }
+          },
+          {
+            "title": "Input Voltage",
+            "x": 500.0,
+            "y": 0.0,
+            "width": 300.0,
+            "height": 128.0,
+            "type": "Text Display",
+            "properties": {
+              "topic": "/MotorSubsystem/Input Voltage",
+              "period": 0.06,
+              "data_type": "double",
+              "show_submit_button": true
+            }
+          },
+          {
+            "title": "RunMotors Print",
+            "x": 0.0,
+            "y": 300.0,
+            "width": 128.0,
+            "height": 128.0,
+            "type": "Boolean Box",
+            "properties": {
+              "topic": "/MotorSubsystem/RunMotors Print",
+              "period": 0.06,
+              "data_type": "boolean",
+              "true_color": 4283215696,
+              "false_color": 4294198070,
+              "true_icon": "None",
+              "false_icon": "None"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
