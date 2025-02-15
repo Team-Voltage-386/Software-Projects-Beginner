@@ -6,9 +6,20 @@ import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.networktables.GenericEntry;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.networktables.IntegerPublisher;
+import edu.wpi.first.networktables.BooleanEntry;
+import edu.wpi.first.networktables.BooleanPublisher;
+import edu.wpi.first.networktables.DoublePublisher;
+import edu.wpi.first.networktables.DoubleSubscriber;
+import edu.wpi.first.networktables.DoubleEntry;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.PubSubOption;
+import edu.wpi.first.networktables.PubSubOptions;
+import edu.wpi.first.networktables.StringPublisher;
+// import edu.wpi.first.networktables.GenericEntry;
+// import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+// import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -17,44 +28,64 @@ import frc.robot.Constants;
 import frc.robot.commands.MotorRunCommand;
 
 public class MotorSubsystem extends SubsystemBase {
-  private GenericEntry m_voltageGenericEntry;
-  private GenericEntry m_voltageOutputGenericEntry;
-  private GenericEntry m_currentOutputGenericEntry;
-  private GenericEntry m_incDecAmountGenericEntry;
-  private GenericEntry m_incrementVoltageGenericEntry;
-  private GenericEntry m_decrementVoltageGenericEntry;
-  private GenericEntry m_doRunMotorsGenericEntry;
-  private GenericEntry m_areMotorsRunningGenericEntry;
+  private final NetworkTable table;
+  private DoubleEntry m_requestedVoltage;
+  private DoublePublisher m_voltageOutputGenericEntry;
+  private DoublePublisher m_currentOutputGenericEntry;
+  private DoubleEntry m_incDecAmountGenericEntry;
+  private BooleanEntry m_incrementVoltageGenericEntry;
+  private BooleanEntry m_decrementVoltageGenericEntry;
+  private BooleanEntry m_doRunMotorsGenericEntry;
+  private BooleanPublisher m_doRunMotorsOutputGenericEntry;
+  private BooleanPublisher m_areMotorsRunningGenericEntry;
   private SparkMax m_motor;
   private boolean m_askedToRunMotors;
   private Command m_motorRunCommand;
   private static final double EPSILON = 0.001;
 
-  public MotorSubsystem() {
-    // Set up Shuffleboard
-    this.m_voltageGenericEntry = Shuffleboard.getTab(getName()).add("Input Voltage", 0.0).withPosition(3, 0)
-        .withSize(2, 1)
-        .getEntry();
-    this.m_voltageOutputGenericEntry = Shuffleboard.getTab(getName()).add("Output Voltage", 0.0).withPosition(0, 0)
-        .withSize(2, 1).getEntry();
-    this.m_currentOutputGenericEntry = Shuffleboard.getTab(getName()).add("Motor Current", 0.0).withPosition(3, 0)
-        .withSize(2, 1).getEntry();
-    this.m_incDecAmountGenericEntry = Shuffleboard.getTab(getName()).add("Inc_Dec Amount", 0.1).withPosition(6, 1)
-        .withSize(1, 1).getEntry();
-    this.m_incrementVoltageGenericEntry = Shuffleboard.getTab(getName()).add("Inc", false).withPosition(4, 1)
-        .withSize(1, 1).withWidget(BuiltInWidgets.kToggleButton).getEntry();
-    this.m_decrementVoltageGenericEntry = Shuffleboard.getTab(getName()).add("Dec", false).withPosition(3, 1)
-        .withSize(1, 1).withWidget(BuiltInWidgets.kToggleButton).getEntry();
-    this.m_doRunMotorsGenericEntry = Shuffleboard.getTab(getName()).add("Run Motors?", false).withPosition(0, 2)
-        .withSize(2, 1)
-        .withWidget(BuiltInWidgets.kToggleButton).getEntry();
-    this.m_areMotorsRunningGenericEntry = Shuffleboard.getTab(getName()).add("Are motors running?", false)
-        .withPosition(0, 3).withSize(2, 1).withWidget(BuiltInWidgets.kBooleanBox).getEntry();
+  public MotorSubsystem(NetworkTableInstance nt) {
+    // // Set up Shuffleboard
+    // this.m_voltageGenericEntry = Shuffleboard.getTab(getName()).add("Input Voltage", 0.0).withPosition(3, 0)
+    //     .withSize(2, 1)
+    //     .getEntry();
+    // this.m_voltageOutputGenericEntry = Shuffleboard.getTab(getName()).add("Output Voltage", 0.0).withPosition(0, 0)
+    //     .withSize(2, 1).getEntry();
+    // this.m_currentOutputGenericEntry = Shuffleboard.getTab(getName()).add("Motor Current", 0.0).withPosition(3, 0)
+    //     .withSize(2, 1).getEntry();
+    //this.m_incDecAmountGenericEntry = Shuffleboard.getTab(getName()).add("Inc_Dec Amount", 0.1).withPosition(6, 1)
+    //     .withSize(1, 1).getEntry();
+    // this.m_incrementVoltageGenericEntry = Shuffleboard.getTab(getName()).add("Inc", false).withPosition(4, 1)
+    //     .withSize(1, 1).withWidget(BuiltInWidgets.kToggleButton).getEntry();
+    // this.m_decrementVoltageGenericEntry = Shuffleboard.getTab(getName()).add("Dec", false).withPosition(3, 1)
+    //     .withSize(1, 1).withWidget(BuiltInWidgets.kToggleButton).getEntry();
+    // this.m_doRunMotorsGenericEntry = Shuffleboard.getTab(getName()).add("Run Motors?", false).withPosition(0, 2)
+    //     .withSize(2, 1)
+    //     .withWidget(BuiltInWidgets.kToggleButton).getEntry();
+    // this.m_areMotorsRunningGenericEntry = Shuffleboard.getTab(getName()).add("Are motors running?", false)
+    //     .withPosition(0, 3).withSize(2, 1).withWidget(BuiltInWidgets.kBooleanBox).getEntry();
 
     // Set up motor state
     this.m_motor = new SparkMax(Constants.Motor.kCANID, MotorType.kBrushless);
     this.m_askedToRunMotors = false;
     this.m_motorRunCommand = new MotorRunCommand(this);
+
+    table = nt.getTable(getName());
+    
+  
+    m_voltageOutputGenericEntry = table.getDoubleTopic("Output Voltage").publish();
+    m_currentOutputGenericEntry = table.getDoubleTopic("Motor Current").publish();
+    m_requestedVoltage = table.getDoubleTopic("Input Voltage").getEntry(0.0, PubSubOption.sendAll(true));
+    m_requestedVoltage.set(0.0);
+    m_incDecAmountGenericEntry = table.getDoubleTopic("Inc_Dec Amount").getEntry(0.0, PubSubOption.sendAll(true));
+    m_incDecAmountGenericEntry.set(0.0);
+
+    m_incrementVoltageGenericEntry = table.getBooleanTopic("INC").getEntry(false);
+    m_incrementVoltageGenericEntry.set(false);// needed to make the entry show up in elastic
+    m_decrementVoltageGenericEntry = table.getBooleanTopic("DEC").getEntry(false);
+    m_decrementVoltageGenericEntry.set(false);// needed to make the entry show up in elastic
+    m_doRunMotorsGenericEntry = table.getBooleanTopic("Run Motors?").getEntry(false);
+    m_doRunMotorsGenericEntry.set(false);// needed to make the entry show up in elastic
+    m_doRunMotorsOutputGenericEntry = table.getBooleanTopic("RunMotors Print").publish();
 
     // when the robot is not disabled and you've clicked the button on shuffleboard
     // to run the motors, the motor voltage is set based on the value on
@@ -77,12 +108,12 @@ public class MotorSubsystem extends SubsystemBase {
         }).onTrue(
             Commands.runOnce(
                 () -> {
-                  this.m_areMotorsRunningGenericEntry.setBoolean(false);
+                  this.m_doRunMotorsOutputGenericEntry.set(false);
                 }).ignoringDisable(true))
         .onFalse(
             Commands.runOnce(
                 () -> {
-                  this.m_areMotorsRunningGenericEntry.setBoolean(true);
+                  this.m_doRunMotorsOutputGenericEntry.set(true);
                 }).ignoringDisable(true));
 
     // When the increment voltage button is pressed, the voltage is incremented
@@ -93,16 +124,16 @@ public class MotorSubsystem extends SubsystemBase {
     // you press the button it'll increment again.
 
     new Trigger(() -> {
-      return this.m_incrementVoltageGenericEntry.getBoolean(false);
+      return this.m_incrementVoltageGenericEntry.get(false);
     }).onTrue(Commands.runOnce(() -> this.incrementVoltageGenericEntry()).andThen(Commands.runOnce(() -> {
-      this.m_incrementVoltageGenericEntry.setBoolean(false);
+      this.m_incrementVoltageGenericEntry.set(false);
     })).ignoringDisable(true));
 
     // Decrement the voltage (see comment above)
     new Trigger(() -> {
-      return this.m_decrementVoltageGenericEntry.getBoolean(false);
+      return this.m_decrementVoltageGenericEntry.get(false);
     }).onTrue(Commands.runOnce(() -> this.decrementVoltageGenericEntry()).andThen(Commands.runOnce(() -> {
-      this.m_decrementVoltageGenericEntry.setBoolean(false);
+      this.m_decrementVoltageGenericEntry.set(false);
     })).ignoringDisable(true));
   }
 
@@ -113,7 +144,7 @@ public class MotorSubsystem extends SubsystemBase {
    *         zero
    */
   public double getVoltage() {
-    double res = this.m_voltageGenericEntry.getDouble(0.0);
+    double res = this.m_requestedVoltage.get(0);
     if (Math.abs(res) < EPSILON) {
       return 0.0;
     } else {
@@ -127,7 +158,9 @@ public class MotorSubsystem extends SubsystemBase {
    * @return the state of the button
    */
   public boolean doRunMotor() {
-    return this.m_doRunMotorsGenericEntry.getBoolean(false);
+    boolean runMotorInput = this.m_doRunMotorsGenericEntry.get(false);
+    m_doRunMotorsOutputGenericEntry.set(runMotorInput);
+    return runMotorInput;
   }
 
   /**
@@ -161,18 +194,18 @@ public class MotorSubsystem extends SubsystemBase {
    * @return the clamped value
    */
   public double getAndUpdateIncDecAmount() {
-    double val = this.m_incDecAmountGenericEntry.getDouble(0.0);
+    double val = this.m_incDecAmountGenericEntry.get(0.0);
     double clampedVal = MathUtil.clamp(val, 0.0, 1.0);
-    this.m_incDecAmountGenericEntry.setDouble(clampedVal);
+    this.m_incDecAmountGenericEntry.set(clampedVal);
     return clampedVal;
   }
 
   public void incrementVoltageGenericEntry() {
-    this.m_voltageGenericEntry.setDouble(this.getVoltage() + this.getAndUpdateIncDecAmount());
+    this.m_requestedVoltage.set(this.getVoltage() + this.getAndUpdateIncDecAmount());
   }
 
   public void decrementVoltageGenericEntry() {
-    this.m_voltageGenericEntry.setDouble(this.getVoltage() - this.getAndUpdateIncDecAmount());
+    this.m_requestedVoltage.set(this.getVoltage() - this.getAndUpdateIncDecAmount());
   }
 
   public void startMotor() {
@@ -188,7 +221,7 @@ public class MotorSubsystem extends SubsystemBase {
    */
   @Override
   public void periodic() {
-    m_voltageOutputGenericEntry.setDouble(this.getMotorVoltage());
-    m_currentOutputGenericEntry.getDouble(this.getMotorCurrent());
+    m_voltageOutputGenericEntry.set(this.getMotorVoltage());
+    m_currentOutputGenericEntry.set(this.getMotorCurrent());
   }
 }
