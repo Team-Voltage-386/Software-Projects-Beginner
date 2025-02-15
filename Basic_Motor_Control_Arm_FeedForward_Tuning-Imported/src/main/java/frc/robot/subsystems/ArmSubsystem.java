@@ -30,17 +30,17 @@ import frc.robot.Constants;
 public class ArmSubsystem extends SubsystemBase {
 
   private final NetworkTable table;
-  private DoublePublisher m_voltageOutputGenericEntry;
-  private DoublePublisher m_relativePositionOutputGenericEntry;
-  private DoublePublisher m_relativePositionRawGenericEntry;
-  private BooleanPublisher m_areMotorsRunningGenericEntry;
-  private DoubleEntry m_feedForwardKSGenericEntry;
-  private DoubleEntry m_feedForwardKGGenericEntry;
-  private DoubleEntry m_feedForwardKVGenericEntry;
-  private DoublePublisher m_feedForwardOutputGenericEntry;
-  private DoublePublisher m_feedForwardActualOutputGenericEntry;
-  private DoubleEntry m_feedForwardInputPositionGenericEntry;
-  private DoubleEntry m_feedForwardInputVelocityGenericEntry;
+  private DoublePublisher m_displayVoltage;
+  private DoublePublisher m_displayRelativePosition;
+  private DoublePublisher m_displayRelativePositionRaw;
+  private BooleanPublisher m_areMotorsRunningBoolean;
+  private DoubleEntry m_feedForwardKSEntry;
+  private DoubleEntry m_feedForwardKGEntry;
+  private DoubleEntry m_feedForwardKVEntry;
+  private DoublePublisher m_displayFeedForwardOutput;
+  private DoublePublisher m_displayFeedForwardActualOutput;
+  private DoubleEntry m_feedForwardInputPositionEntry;
+  private DoubleEntry m_feedForwardInputVelocityEntry;
 
   private SparkMax m_motor;
   private ArmFeedforward m_armFeedforward;
@@ -51,36 +51,34 @@ public class ArmSubsystem extends SubsystemBase {
     table = nt.getTable(getName());
     // Dashboard objects
     // Informational objects
-    m_voltageOutputGenericEntry = table.getDoubleTopic("Output Voltage").publish();
-     m_relativePositionOutputGenericEntry = table.getDoubleTopic("Output Rel Enc Position").publish();
-    m_relativePositionRawGenericEntry = table.getDoubleTopic("Raw Rel Enc Position").publish();
-    m_areMotorsRunningGenericEntry = table.getBooleanTopic("Are motors running?").publish();
+    m_displayVoltage = table.getDoubleTopic("Output Voltage").publish();
+    m_displayRelativePosition = table.getDoubleTopic("Output Rel Enc Position").publish();
+    m_displayRelativePositionRaw = table.getDoubleTopic("Raw Rel Enc Position").publish();
+    m_areMotorsRunningBoolean = table.getBooleanTopic("Are motors running?").publish();
 
     // Objects to be changed by the user
-    m_feedForwardKSGenericEntry = table.getDoubleTopic("FF KS").getEntry(0.0, PubSubOption.sendAll(true));
-    m_feedForwardKSGenericEntry.set(0.0);
-    m_feedForwardKGGenericEntry = table.getDoubleTopic("FF KG").getEntry(0.0, PubSubOption.sendAll(true));
-    m_feedForwardKGGenericEntry.set(0.0);
-    m_feedForwardKVGenericEntry = table.getDoubleTopic("FF KV").getEntry(0.0, PubSubOption.sendAll(true));
-    m_feedForwardKVGenericEntry.set(0.0);
+    m_feedForwardKSEntry = table.getDoubleTopic("FF KS").getEntry(0.0, PubSubOption.sendAll(true));
+    m_feedForwardKSEntry.set(0.0);
+    m_feedForwardKGEntry = table.getDoubleTopic("FF KG").getEntry(0.0, PubSubOption.sendAll(true));
+    m_feedForwardKGEntry.set(0.0);
+    m_feedForwardKVEntry = table.getDoubleTopic("FF KV").getEntry(0.0, PubSubOption.sendAll(true));
+    m_feedForwardKVEntry.set(0.0);
 
     // Actual output
-    m_feedForwardActualOutputGenericEntry = table.getDoubleTopic("FF Actual Output").publish();
+    m_displayFeedForwardActualOutput = table.getDoubleTopic("FF Actual Output").publish();
 
     // User provides position and speed and the FF controller will calculate the FF
     // Output that it would supply
-    m_feedForwardInputPositionGenericEntry = table.getDoubleTopic("FF Input Pos Rad").getEntry(0.0, PubSubOption.sendAll(true));
-    m_feedForwardInputPositionGenericEntry.set(0.0);
-    m_feedForwardInputVelocityGenericEntry = table.getDoubleTopic("FF Input Vel Rad_s").getEntry(0.0, PubSubOption.sendAll(true));
-    m_feedForwardInputVelocityGenericEntry.set(0.0);
-    m_feedForwardOutputGenericEntry = table.getDoubleTopic("FF Output").getEntry(0.0, PubSubOption.sendAll(true));
-    m_feedForwardOutputGenericEntry.set(0.0);
-
+    m_feedForwardInputPositionEntry = table.getDoubleTopic("FF Input Pos Rad").getEntry(0.0, PubSubOption.sendAll(true));
+    m_feedForwardInputPositionEntry.set(0.0);
+    m_feedForwardInputVelocityEntry = table.getDoubleTopic("FF Input Vel Rad_s").getEntry(0.0, PubSubOption.sendAll(true));
+    m_feedForwardInputVelocityEntry.set(0.0);
+    m_displayFeedForwardOutput = table.getDoubleTopic("FF Output").getEntry(0.0, PubSubOption.sendAll(true));
+    m_displayFeedForwardOutput.set(0.0);
 
     // There is one motor
     this.m_motor = new SparkMax(Constants.Motor.kCANID, MotorType.kBrushless);
-    // coast mode means we have to fight gravity (the motor won't help hold the
-    // position)
+    // coast mode means we have to fight gravity (the motor won't help hold the position)
     
     // The encoder is a relative encoder (not absolute)
 
@@ -123,7 +121,7 @@ public class ArmSubsystem extends SubsystemBase {
         desiredVelocity = 0.0;
       }
       double ffOut = this.m_armFeedforward.calculate(0.0, desiredVelocity);
-      this.m_feedForwardActualOutputGenericEntry.set(ffOut);
+      this.m_displayFeedForwardActualOutput.set(ffOut);
       this.m_motor.setVoltage(ffOut);
     });
 
@@ -136,12 +134,12 @@ public class ArmSubsystem extends SubsystemBase {
         }).onTrue(
             Commands.runOnce(
                 () -> {
-                  this.m_areMotorsRunningGenericEntry.set(false);
+                  this.m_areMotorsRunningBoolean.set(false);
                 }).ignoringDisable(true))
         .onFalse(
             Commands.runOnce(
                 () -> {
-                  this.m_areMotorsRunningGenericEntry.set(true);
+                  this.m_areMotorsRunningBoolean.set(true);
                 }).ignoringDisable(true));
 
     this.setDefaultCommand(this.m_setVoltageToFeedForwardCommand);
@@ -163,15 +161,15 @@ public class ArmSubsystem extends SubsystemBase {
   }
 
   public double getFFKS() {
-    return this.m_feedForwardKSGenericEntry.get(0.0);
+    return this.m_feedForwardKSEntry.get(0.0);
   }
 
   public double getFFKG() {
-    return this.m_feedForwardKGGenericEntry.get(0.0);
+    return this.m_feedForwardKGEntry.get(0.0);
   }
 
   public double getFFKV() {
-    return this.m_feedForwardKVGenericEntry.get(0.0);
+    return this.m_feedForwardKVEntry.get(0.0);
   }
 
   public void updateFeedForward() {
@@ -181,11 +179,11 @@ public class ArmSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // Update dashboard
-    this.m_voltageOutputGenericEntry.set(this.getMotorVoltage());
-    this.m_relativePositionOutputGenericEntry.set(this.getArmPosition());
-    this.m_relativePositionRawGenericEntry.set(this.m_motor.getEncoder().getPosition());
-    this.m_feedForwardOutputGenericEntry
-        .set(this.m_armFeedforward.calculate(this.m_feedForwardInputPositionGenericEntry.get(0.0),
-            this.m_feedForwardInputVelocityGenericEntry.get(0.0)));
+    this.m_displayVoltage.set(this.getMotorVoltage());
+    this.m_displayRelativePosition.set(this.getArmPosition());
+    this.m_displayRelativePositionRaw.set(this.m_motor.getEncoder().getPosition());
+    this.m_displayFeedForwardOutput
+        .set(this.m_armFeedforward.calculate(this.m_feedForwardInputPositionEntry.get(0.0),
+            this.m_feedForwardInputVelocityEntry.get(0.0)));
   }
 }
