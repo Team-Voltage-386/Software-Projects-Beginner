@@ -56,5 +56,7 @@
     "edu.wpi.first.math.proto.*",
     "edu.wpi.first.math.**.proto.*",
     "edu.wpi.first.math.**.struct.*",
-  ]
+  ],
+  "editor.wordWrap": "wordWrapColumn",
+  "editor.wordWrapColumn": 120
 }
