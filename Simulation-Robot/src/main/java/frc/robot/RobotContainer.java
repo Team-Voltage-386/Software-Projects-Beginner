@@ -10,6 +10,7 @@ import frc.robot.Constants.LimelightConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.Drive;
+import frc.robot.commands.DriveForwardCommand;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.StopDrive;
 import frc.robot.subsystems.Drivetrain;
@@ -101,7 +102,6 @@ public class RobotContainer {
     // Xbox controllers return negative values when we push forward.
     this.m_driveCommand = new Drive(m_swerve);
     this.m_swerve.setDefaultCommand(this.m_driveCommand);
-    this.m_driveForwardCommand = new DriveForwardCommand(m_swerve);
 
     autoChooser = new SendableChooser<>(); // Default auto will be `Commands.none()'
 
@@ -144,7 +144,7 @@ public class RobotContainer {
    * Use this method to define your trigger->command mappings.
    */
   public void configureBindings() {
-
+    Controller.kDriveController.a().onTrue(new DriveForwardCommand(m_swerve));
   }
 
   private void configurePathPlanner() {
