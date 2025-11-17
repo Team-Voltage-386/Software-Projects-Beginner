@@ -4,9 +4,11 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.sim.SimDrivetrain;
 
 /**
  * The methods in this class are called automatically corresponding to each mode, as described in
@@ -17,6 +19,8 @@ public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
 
   private final RobotContainer m_container;
+  protected boolean gyroCorrect;
+  protected Alliance currentAlliance;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -25,7 +29,9 @@ public class Robot extends TimedRobot {
   public Robot() {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
+    gyroCorrect = false;
     m_container = new RobotContainer();
+    currentAlliance = m_container.getDrive().getAlliance();
   }
 
   /**
@@ -50,11 +56,34 @@ public class Robot extends TimedRobot {
   public void disabledInit() {}
 
   @Override
-  public void disabledPeriodic() {}
+  public void disabledPeriodic() {
+    if (currentAlliance != m_container.getDrive().getAlliance()) {
+      currentAlliance = m_container.getDrive().getAlliance();
+      System.out.println("Alliance changed to " + currentAlliance);
+      gyroCorrect = false;
+  }
+  if (!gyroCorrect) {
+      double expectedGyro = m_container.getDrive().getExpectedStartGyro();
+      double currentGyro = m_container.getDrive().getGyroYawRotation2d().getDegrees();
+      System.out.println("Expected Gyro: " + expectedGyro + " current: " + currentGyro);
+      if (Math.abs(expectedGyro - currentGyro) > 1.0) {
+          System.out.println("Gyro delta too large");
+          m_container.getDrive().resetGyro();
+          System.out.println("Reset gyro from robot periodic");
+      } else {
+          gyroCorrect = true;
+          m_container.getDrive().resetOdo();
+      }
+  }
+
+  }
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
+    if(Robot.isSimulation()) {
+      ((SimDrivetrain)m_container.getDrive()).reset();
+    }
     m_container.clearDefaultCommand();
     m_container.setAutoDefaultCommand();
     m_container.startAutonomous();

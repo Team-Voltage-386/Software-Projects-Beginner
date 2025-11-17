@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -142,7 +143,13 @@ public class Drivetrain extends SubsystemBase {
     }
 
     public Alliance getAlliance() {
-        return DriverStation.getAlliance().get();
+        Optional<Alliance> myAlliance = DriverStation.getAlliance();
+        if (myAlliance.isPresent()) {
+            return myAlliance.get();
+        } else {
+            System.out.println("No alliance present. Returning red.");
+            return Alliance.Red;
+        }
     }
 
     /**

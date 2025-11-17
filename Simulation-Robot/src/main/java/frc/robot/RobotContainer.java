@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import frc.robot.Constants.Controller;
 import frc.robot.Constants.ID;
 import frc.robot.Constants.LimelightConstants;
 import frc.robot.Constants.OperatorConstants;
@@ -17,6 +18,8 @@ import frc.robot.subsystems.Limelight;
 import frc.sim.SimDrivetrain;
 import frc.sim.SimLimelight;
 import frc.sim.SimTarget;
+
+import static edu.wpi.first.units.Units.Radian;
 
 import java.io.IOException;
 import java.util.List;
@@ -98,6 +101,7 @@ public class RobotContainer {
     // Xbox controllers return negative values when we push forward.
     this.m_driveCommand = new Drive(m_swerve);
     this.m_swerve.setDefaultCommand(this.m_driveCommand);
+    this.m_driveForwardCommand = new DriveForwardCommand(m_swerve);
 
     autoChooser = new SendableChooser<>(); // Default auto will be `Commands.none()'
 
@@ -111,7 +115,7 @@ public class RobotContainer {
 
     if (Robot.isSimulation()) {
       ((SimDrivetrain) m_swerve).setSimPose(new Pose3d(new Translation3d(),
-          new Rotation3d(0, 0, m_swerve.getExpectedStartGyro())));
+          new Rotation3d(0, 0, m_swerve.getExpectedStartGyro()*(3.14159/180.0))));
       System.out.println("Setting sim pose " + ((SimDrivetrain) m_swerve).getSimPose());
     }
   }
@@ -130,6 +134,10 @@ public class RobotContainer {
 
   public void clearDefaultCommand() {
     this.m_swerve.removeDefaultCommand();
+  }
+
+  public Drivetrain getDrive() {
+    return this.m_swerve;
   }
 
   /**
@@ -181,7 +189,7 @@ public void startAutonomous() {
         }
         if (Robot.isSimulation()) {
           ((SimDrivetrain) m_swerve).setSimPose(new Pose3d(new Translation3d(first.anchor()),
-              new Rotation3d(0, 0, m_swerve.getExpectedStartGyro())));
+              new Rotation3d(0, 0, (m_swerve.getExpectedStartGyro()/180.0)*3.14159)));
           System.out.println("Setting sim pose " + ((SimDrivetrain) m_swerve).getSimPose());
         }
       }
