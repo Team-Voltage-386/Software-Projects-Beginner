@@ -101,7 +101,6 @@ public class RobotContainer {
     // Xbox controllers return negative values when we push forward.
     this.m_driveCommand = new Drive(m_swerve);
     this.m_swerve.setDefaultCommand(this.m_driveCommand);
-    this.m_driveForwardCommand = new DriveForwardCommand(m_swerve);
 
     autoChooser = new SendableChooser<>(); // Default auto will be `Commands.none()'
 
