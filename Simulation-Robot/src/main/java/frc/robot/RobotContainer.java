@@ -147,22 +147,31 @@ public class RobotContainer {
   }
 
   private void configurePathPlanner() {
-    autoChooser.addOption("DriveForward", "DriveForward"); // Permanent choice
+  //  autoChooser.addOption("DriveForward", "DriveForward"); // Permanent choice
     autoChooser.addOption("MyNewPath", "MyNewPath");
+    autoChooser.addOption("swoop", "swoop");
 }
+
 
 public void startAutonomous() {
   String auto = autoChooser.getSelected();
   SequentialCommandGroup start;
-  if (auto.equals("DriveForward")) { // For testing
+  // if (auto.equals("DriveForward")) { // For testing
+  //   start = new SequentialCommandGroup(
+  //       getAutonomousCommand("DriveForward", true));
+  //   start.schedule();
+  // }
+  
+  if (auto.equals("swoop")){
     start = new SequentialCommandGroup(
-        getAutonomousCommand("DriveForward", true));
-    start.schedule();
-  } else if (auto.equals("MyNewPath")){
-    start = new SequentialCommandGroup(
-      getAutonomousCommand("MyNewPath", true));
+      getAutonomousCommand("swoop", true));
     start.schedule();
   }
+ else if (auto.equals("MyNewPath")){
+  start = new SequentialCommandGroup(
+    getAutonomousCommand("MyNewPath", true));
+  start.schedule();
+ }
   else {
     System.err.println("Invalid auto routine specified");
   }
